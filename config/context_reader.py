@@ -29,7 +29,7 @@ class ContextReader(object):
 
     @property
     def indent(self):
-        return self._indentCount * self._indentSize * " "
+        return self._indentCount * self._indentSize * u" "
    
    
     def _dispatch(self, context, name="root"):
@@ -41,7 +41,7 @@ class ContextReader(object):
         
         if isGroup:
             self._indentCount+= 1
-            self._handler.ignoreContent("\n")
+            self._handler.ignoreContent(u"\n")
 
         if context.content is not None: 
             self._handler.addContent( str(context.content) )
@@ -54,7 +54,7 @@ class ContextReader(object):
             self._handler.ignoreContent(self.indent)
     
         self._handler.leaveContext()
-        self._handler.ignoreContent("\n")
+        self._handler.ignoreContent(u"\n")
 
 
 

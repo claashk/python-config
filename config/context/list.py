@@ -17,7 +17,7 @@ class List(Value):
                        attr="value",
                        type=str,
                        maxCount= -1 ) :
-        super().__init__(obj=obj, attr=attr, type=type, maxCount=maxCount)        
+        super(List, self).__init__(obj=obj, attr=attr, type=type, maxCount=maxCount)        
 
 
     @property

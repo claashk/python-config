@@ -73,7 +73,7 @@ class DefaultReader(object):
     def startDocument(self):
         """Start parsing a new document/stream
         """
-        self._stack.clear()
+        self._stack=list()
         self._impl.startDocument()
         self._impl.locator= self._locator
         self._impl.enterContext("root") #Enter root context
@@ -276,7 +276,7 @@ class DefaultReader(object):
         try:
             self._impl.enterContext(self._buffer[0], self._attributes)
         finally:
-            self._buffer.clear()
+            self._buffer=list()
             self._attributes.clear()
 
 
@@ -292,7 +292,7 @@ class DefaultReader(object):
 
         if self._buffer:
             self._impl.addContent("".join(self._buffer))
-            self._buffer.clear()
+            self._buffer=list()
             
         self._stack.pop()
         self._impl.leaveContext()
@@ -324,7 +324,7 @@ class DefaultReader(object):
             for content in self._buffer:
                 self._impl.addContent(content)
 
-            self._buffer.clear()
+            self._buffer=list()
             self._impl.addContent(match.group(0))                
 
 

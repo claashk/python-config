@@ -7,7 +7,7 @@ class Ignore(Context):
     """Context which basically ignores all input.   
     """          
     def __init__(self, maxCount=-1):
-        super().__init__(maxCount=maxCount)
+        super(Ignore, self).__init__(maxCount=maxCount)
 
 
     def getContext(self, name):

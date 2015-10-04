@@ -60,7 +60,7 @@ class ErrorHandler(object):
         """
         self._nWarnings+= 1
         if logLevel <= self._logLevel:
-            self._err.write("WARNING: ")
+            self._err.write(u"WARNING: ")
             self.writeLocator(self._err)
             self._err.write(message)
         
@@ -76,7 +76,7 @@ class ErrorHandler(object):
         """
         self._nWarnings+= 1
         if logLevel <= self._logLevel:
-            self._err.write("ERROR: ")
+            self._err.write(u"ERROR: ")
             self.writeLocator(self._err)
             self._err.write(message)
 
@@ -102,6 +102,6 @@ class ErrorHandler(object):
         if not self.locator:
             return
             
-        stream.write("In line {0}:{1}:\n".format(self.locator.line,
-                                                 self.locator.column) )
+        stream.write(u"In line {0}:{1}:\n".format(self.locator.line,
+                                                  self.locator.column) )
 

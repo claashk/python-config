@@ -36,17 +36,17 @@ class XmlWriterTestCase(unittest.TestCase):
 
     def test_case2(self):
         str1= StringIO( 
-            'value1 = 5\n'
-            'value2 = 1.23 \n'
-            'section [first = "1",\n'
-            '         second= "long string"] { \n'
-            '  value3= on \n'
-            '  # A comment line\n'
-            '  value4= 1 \n'
-            '  value4 = 2 # With comment \n'
-            '  value4 = 42\n'
-            '  list = 1,2, 3, 4  , 5\n'
-            '}\n')
+            u'value1 = 5\n'
+            u'value2 = 1.23 \n'
+            u'section [first = "1",\n'
+            u'         second= "long string"] { \n'
+            u'  value3= on \n'
+            u'  # A comment line\n'
+            u'  value4= 1 \n'
+            u'  value4 = 2 # With comment \n'
+            u'  value4 = 42\n'
+            u'  list = 1,2, 3, 4  , 5\n'
+            u'}\n')
 
         reader= DefaultReader(self.handler1)
         reader.parse(str1)

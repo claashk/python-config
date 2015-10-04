@@ -12,11 +12,11 @@ class IniReader(DefaultReader):
     """
     def __init__(self, contentHandler, assignChar='=', commentChar=';'):
 
-        super().__init__( contentHandler=contentHandler,
-                          assignChar=assignChar,
-                          commentChar=commentChar)
+        super(IniReader, self).__init__( contentHandler=contentHandler,
+                                         assignChar=assignChar,
+                                         commentChar=commentChar)
 
-        self._actions.clear()        
+        self._actions= list()        
         
         # Default actions
         self.actions([

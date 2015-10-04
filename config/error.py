@@ -12,7 +12,7 @@ class ConfigError(Exception):
     def __init__(self, message=None, locator=None):
 
         # Call the base class constructor with the parameters it needs
-        super().__init__(message, locator)
+        super(ConfigError, self).__init__(message, locator)
 
     @property
     def message(self):

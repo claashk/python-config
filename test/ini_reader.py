@@ -35,15 +35,15 @@ class IniReaderTestCase(unittest.TestCase):
                     
     
     def test_case1(self):
-        text=StringIO( "value1 = 5\n"
-                       "value2= 4.2\n"
-                       "\n"
-                       " [section] "
-                       "  value3= on \n"
-                       "  value4  = 3\n"
-                       "  value4\t= 4 \n"
-                       "  value4 = 5\n"
-                       "\n" )
+        text=StringIO( u"value1 = 5\n"
+                       u"value2= 4.2\n"
+                       u"\n"
+                       u" [section] "
+                       u"  value3= on \n"
+                       u"  value4  = 3\n"
+                       u"  value4\t= 4 \n"
+                       u"  value4 = 5\n"
+                       u"\n" )
 
         self.reader.parse(text)        
         self.assertEqual(self.val1, 5)

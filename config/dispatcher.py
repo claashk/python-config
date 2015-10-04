@@ -49,7 +49,7 @@ class Dispatcher(object):
         Clears the current context stack and invokes :meth:`~.Context.enter`
         on the main context.
         """
-        self._stack.clear()
+        self._stack=list()
         
         if not self._root:
             self.fatalError("Missing root context")

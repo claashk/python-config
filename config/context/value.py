@@ -21,7 +21,7 @@ class Value(Context):
                        attr="value",
                        type=str,
                        maxCount=1 ) :
-        super().__init__(maxCount)        
+        super(Value, self).__init__(maxCount)        
         self._obj  = obj
         self._attr = attr
         self._type = type
@@ -41,8 +41,8 @@ class Value(Context):
     def reset(self):
         """Reset counter and clear internal buffer
         """
-        super().reset()
-        self._buffer.clear()
+        super(Value, self).reset()
+        self._buffer=bytearray()
 
 
     def parse(self, content=None):
@@ -55,7 +55,7 @@ class Value(Context):
             Content string converted to desired type
         """
         retval= self._type( self._buffer.decode() )
-        self._buffer.clear()        
+        self._buffer=bytearray()
         return retval
 
 

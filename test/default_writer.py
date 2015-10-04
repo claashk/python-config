@@ -21,38 +21,38 @@ class DefaultWriterTestCase(unittest.TestCase):
                                                   
     def test_case1(self):
         str1= bytes(
-            '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'
-            '<root>\r\n'
-            '  <value1>5</value1>\r\n'
-            '  <value2>1.23</value2>\n'
-            '  <section first="1" second="long string">\n'
-            '    <value3>on</value3>\n'
-            '    <value4>1</value4> \n'
-            '    <value4>2</value4>  \n'
-            '    <value4>42</value4>   \n'
-            '    <value5>A very long string</value5>\n'
-            '    <value5>"A very long string"</value5>\n'
-            '    <value6></value6>\n'
-            '  </section>\n'
-            '  <f>sin(arg1= 1, arg2= 3)</f>\n'
-            '</root>'.encode("utf-8") )
+            u'<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'
+            u'<root>\r\n'
+            u'  <value1>5</value1>\r\n'
+            u'  <value2>1.23</value2>\n'
+            u'  <section first="1" second="long string">\n'
+            u'    <value3>on</value3>\n'
+            u'    <value4>1</value4> \n'
+            u'    <value4>2</value4>  \n'
+            u'    <value4>42</value4>   \n'
+            u'    <value5>A very long string</value5>\n'
+            u'    <value5>"A very long string"</value5>\n'
+            u'    <value6></value6>\n'
+            u'  </section>\n'
+            u'  <f>sin(arg1= 1, arg2= 3)</f>\n'
+            u'</root>'.encode("utf-8") )
 
         parseString(str1, XmlReader(self.handler1))
 
         expected=str(
-            "\n"
-            "  value1= 5\n"
-            "  value2= 1.23\n"
-            "  section[first='1', second='long string'] {\n"
-            "    value3= on\n"
-            "    value4= 1 \n"
-            "    value4= 2  \n"
-            "    value4= 42   \n"
-            "    value5= A very long string\n"
-            "    value5= \"A very long string\"\n"
-            "    value6= ''\n"
-            "  }\n"
-            "  f= sin(arg1= 1, arg2= 3)\n")
+            u"\n"
+            u"  value1= 5\n"
+            u"  value2= 1.23\n"
+            u"  section[first='1', second='long string'] {\n"
+            u"    value3= on\n"
+            u"    value4= 1 \n"
+            u"    value4= 2  \n"
+            u"    value4= 42   \n"
+            u"    value5= A very long string\n"
+            u"    value5= \"A very long string\"\n"
+            u"    value6= ''\n"
+            u"  }\n"
+            u"  f= sin(arg1= 1, arg2= 3)\n")
 
         self.assertEqual(self.out.getvalue(), expected)
         self.assertEqual(self.err.getvalue(), "")
@@ -60,22 +60,22 @@ class DefaultWriterTestCase(unittest.TestCase):
 
     def test_case2(self):
         str1= StringIO(
-            'value1 = 5\r\n'
-            'value2 = 1.23 \n'
-            'section [first = "1",\n'
-            '         second= "long string"] {\n'
-            '  value3= "on"\n'
-            '  value4= 1 # with comment \n'
-            '  # A comment line \n'
-            '\n'
-            '  value4= 2 \n'
-            '  value4= 42  \n'
-            '  value5= \'A very long quoted string\' \n'
-            '  value6 {}\n'
-            '  func= sin(arg1=1, arg2=2)\n'
-            '  f= sin(arg1="xxx with space",  \n'
-            '         arg2= 55.123)  \n'
-            '} \n' )
+            u'value1 = 5\r\n'
+            u'value2 = 1.23 \n'
+            u'section [first = "1",\n'
+            u'         second= "long string"] {\n'
+            u'  value3= "on"\n'
+            u'  value4= 1 # with comment \n'
+            u'  # A comment line \n'
+            u'\n'
+            u'  value4= 2 \n'
+            u'  value4= 42  \n'
+            u'  value5= \'A very long quoted string\' \n'
+            u'  value6 {}\n'
+            u'  func= sin(arg1=1, arg2=2)\n'
+            u'  f= sin(arg1="xxx with space",  \n'
+            u'         arg2= 55.123)  \n'
+            u'} \n' )
 
         expected= str(
             "value1= 5\r\n"

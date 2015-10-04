@@ -48,7 +48,7 @@ class DefaultWriter(object):
     def startDocument(self):
         self._state= NO_CONTEXT
         self._level= 0
-        self._buffer.clear()
+        self._buffer= list()
         self._foundContent= False
     
     
@@ -189,7 +189,7 @@ class DefaultWriter(object):
             yield "{0}='{1}'".format(key, value)
 
             
-    def _dumpBuffer(self, fill="<?>"):
+    def _dumpBuffer(self, fill=u"<?>"):
         """Dump buffer content to output stream and clear buffer
         
         Arguments:
@@ -200,7 +200,7 @@ class DefaultWriter(object):
                 self._os.write(fill)
             else:
                 self._os.write(string)
-        self._buffer.clear()
+        self._buffer=list()
         
         
     def _beginAssignment(self):
@@ -209,7 +209,7 @@ class DefaultWriter(object):
         Writes the assignment character followed by a start string character
         and dumps the buffer. Finally the current state is set to IN_ASSIGNMENT.
         """
-        self._dumpBuffer( "{0} ".format(self._assignChar) )
+        self._dumpBuffer( u"{0} ".format(self._assignChar) )
         self._state= IN_ASSIGNMENT
         
         
@@ -219,6 +219,6 @@ class DefaultWriter(object):
         Writes an opening curly bracket followed by the buffer content to the
         output stream. The current state is set to `IN_CONTEXT`.        
         """
-        self._dumpBuffer("{")
+        self._dumpBuffer(u"{")
         self._state= IN_CONTEXT
         

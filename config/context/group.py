@@ -11,7 +11,7 @@ class Group(Context):
         maxCount (int): Maximum number of allowed occurences.
     """
     def __init__(self, contexts=dict(), maxCount=1):
-        super().__init__(maxCount=maxCount)        
+        super(Group, self).__init__(maxCount=maxCount)        
         self._contexts= dict()
 
         for name, ctx in contexts.items():
@@ -57,7 +57,7 @@ class Group(Context):
     def reset(self):
         """Resets this context and all sub-contexts
         """
-        super().reset()
+        super(Group, self).reset()
         
         for name, ctx in self:
             ctx.reset()
@@ -74,7 +74,7 @@ class Group(Context):
         for name, ctx in self:
             ctx.reset()
 
-        super().enter(attrs=attrs)
+        super(Group, self).enter(attrs=attrs)
         
 
     def getContext(self, name):

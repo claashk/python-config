@@ -35,14 +35,14 @@ class DefaultReaderTestCase(unittest.TestCase):
                                                       err=self.err ) ))                    
     
     def test_case1(self):
-        text=StringIO( "value1 = 5\n"
-                       "# Comment line\n"
-                       "value2= 4.2 # with comment\n"
-                       "# value2= 500.\n"
-                       "section { value3= on \n"
-                       "  value4  = 3\n"
-                       "  value4\t= 4 ; value4 = 5\n"
-                       "}\n" )
+        text=StringIO( u"value1 = 5\n"
+                       u"# Comment line\n"
+                       u"value2= 4.2 # with comment\n"
+                       u"# value2= 500.\n"
+                       u"section { value3= on \n"
+                       u"  value4  = 3\n"
+                       u"  value4\t= 4 ; value4 = 5\n"
+                       u"}\n" )
 
         self.reader.parse(text)        
         self.assertEqual(self.val1, 5)
@@ -59,10 +59,10 @@ class DefaultReaderTestCase(unittest.TestCase):
 
 
     def test_case2(self):
-        text=StringIO( "value1 [att1=attr1, att2='attr2'] = 5\n"
-                       "value2 [ att3='one', #comment\n"
-                       "        # another comment\n"
-                               " att4='two' ] = 4.2\n" )
+        text=StringIO( u"value1 [att1=attr1, att2='attr2'] = 5\n"
+                       u"value2 [ att3='one', #comment\n"
+                       u"      # another comment\n"
+                       u" att4='two' ] = 4.2\n" )
 
         self.reader.parse(text)
         self.assertEqual(self.val1, 5)
