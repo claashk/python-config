@@ -53,6 +53,8 @@ class HelpDecoratorTestCase(unittest.TestCase):
         
         self.assertEqual(self.intValue.help, "This is an integer value")
         self.assertEqual(self.group.help, "This is a group")
+        self.assertEqual(self.intValue.content, self.int)
+        self.assertEqual(self.group.content, None)
 
         count=0
         for name, ctx in self.group:

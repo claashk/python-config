@@ -43,6 +43,12 @@ class Decorator(Context):
         return self._parent.help
 
 
+    @property
+    def content(self):
+        """Access content of current context"""
+        return self._parent.content
+
+
     def reset(self):
         """Reset counter to zero
         """
