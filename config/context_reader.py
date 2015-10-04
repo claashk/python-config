@@ -89,5 +89,6 @@ class ContextReader(object):
                     x= end
 
                 self._handler.ignoreContent(self.indent)
-                self._handler.comment(line[pos:x])
+                self._handler.addComment(line[pos:x])
+                self._handler.ignoreContent("\n")
                 pos= x + 1
