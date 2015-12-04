@@ -1,4 +1,6 @@
+#!/usr/bin/env python2 
 # -*- coding: utf-8 -*-
+
 import unittest
 from config.context import Map
 from config.context import Value
@@ -12,13 +14,13 @@ class MapTestCase(unittest.TestCase):
         self.list= []
 
         self.boolCtx= Value( self,
-                             "bool",
-                             Map({'Yes' : True, 'No' : False}),
+                             u"bool",
+                             Map({u'Yes' : True, u'No' : False}),
                              maxCount=2 )
                             
         self.listCtx= List( self,
-                            "list",
-                            Map({'On' : True, 'Off' : False}),
+                            u"list",
+                            Map({u'On' : True, u'Off' : False}),
                             maxCount=3) 
         
        
@@ -30,19 +32,19 @@ class MapTestCase(unittest.TestCase):
     
     def test_parse(self):
         self.boolCtx.enter()
-        self.boolCtx.addContent("No")
+        self.boolCtx.addContent(u"No")
         self.boolCtx.leave()
         
         self.boolCtx.enter()
-        self.boolCtx.addContent("no")
+        self.boolCtx.addContent(u"no")
         self.assertRaises(KeyError, self.boolCtx.leave)
         
         self.listCtx.enter()        
-        self.listCtx.addContent("On")
+        self.listCtx.addContent(u"On")
         self.listCtx.leave()
         
         self.listCtx.enter()
-        self.listCtx.addContent("Off")
+        self.listCtx.addContent(u"Off")
         self.listCtx.leave()
         
         self.assertEqual(self.bool, False)
@@ -52,7 +54,7 @@ class MapTestCase(unittest.TestCase):
 
         
     def test_contextInterface(self):
-        self.assertRaises(NotImplementedError, self.boolCtx.getContext, "ctx")
+        self.assertRaises(NotImplementedError, self.boolCtx.getContext, u"ctx")
         
 
 def suite():
@@ -61,5 +63,5 @@ def suite():
     return unittest.TestLoader().loadTestsFromTestCase(MapTestCase)
 
 
-if __name__ == '__main__':
+if __name__ == u'__main__':
     unittest.TextTestRunner(verbosity=2).run( suite() )

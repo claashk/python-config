@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from .context import Context
@@ -18,8 +17,8 @@ class Value(Context):
         maxCount (:class:`int`): Maximum number of occurences
     """
     def __init__(self, obj=None,
-                       attr="value",
-                       type=str,
+                       attr=u"value",
+                       type=unicode,
                        maxCount=1 ) :
         super(Value, self).__init__(maxCount)        
         self._obj  = obj

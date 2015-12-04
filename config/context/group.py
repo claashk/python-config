@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from .context import Context
@@ -96,5 +95,5 @@ class Group(Context):
         if retval is not None:
             return retval
         
-        raise KeyError("Unknown context '{0}'".format(name))
+        raise KeyError(u"Unknown context '{0}'".format(name))
 

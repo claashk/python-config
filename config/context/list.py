@@ -1,7 +1,7 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from .value import Value
+from itertools import imap
 
 class List(Value):
     """List Decorator
@@ -14,8 +14,8 @@ class List(Value):
         maxCount (:class:`int`): Maximum number of occurences
     """
     def __init__(self, obj=None,
-                       attr="value",
-                       type=str,
+                       attr=u"value",
+                       type=unicode,
                        maxCount= -1 ) :
         super(List, self).__init__(obj=obj, attr=attr, type=type, maxCount=maxCount)        
 
@@ -24,7 +24,7 @@ class List(Value):
     def content(self):
         """Access current value
         """
-        return ",".join( map(str, getattr(self._obj, self._attr) ))
+        return u",".join( imap(unicode, getattr(self._obj, self._attr) ))
 
 
     def leave(self):

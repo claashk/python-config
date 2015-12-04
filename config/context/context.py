@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from ..error import ConfigWarning
@@ -44,7 +43,7 @@ class Context(object):
     @property
     def help(self):
         """Print help message"""
-        return ""
+        return u""
 
 
     @property
@@ -68,7 +67,7 @@ class Context(object):
             IOError if count exceeds maxCount.        
         """
         if self._maxCount != -1 and self._count >= self._maxCount:
-            raise IOError("Max count exceeded!")
+            raise IOError(u"Max count exceeded!")
         self._count += 1
 
 
@@ -87,10 +86,10 @@ class Context(object):
         self.increaseCount()
         
         if attrs:
-            msg="Ignored attributes:\n"
+            msg=u"Ignored attributes:\n"
             
             for key, value in attrs.items():
-                msg+= "  '{0}' ('{1}')\n".format(key, value)
+                msg+= u"  '{0}' ('{1}')\n".format(key, value)
 
             raise ConfigWarning(msg)
     
@@ -115,7 +114,7 @@ class Context(object):
         Return:
              Context instance
         """
-        raise NotImplementedError("Sub context not supported ('{0}')"
+        raise NotImplementedError(u"Sub context not supported ('{0}')"
                                   .format(name))
 
 
@@ -130,7 +129,7 @@ class Context(object):
         Return:
             Parsed value
         """
-        raise NotImplementedError("Context unable to parse")
+        raise NotImplementedError(u"Context unable to parse")
 
 
     def addContent(self, content):
@@ -146,7 +145,7 @@ class Context(object):
             self.ignoreContent(content)
             return
         
-        raise NotImplementedError("Context does not support content ('{0}')"
+        raise NotImplementedError(u"Context does not support content ('{0}')"
                                   .format(content))
 
 

@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 class Map(object):
@@ -14,8 +13,8 @@ class Map(object):
         self._values= values
 
         for name, value in self._values.items():
-            if type(name) != str:
-                raise ValueError("Expected key of type string, got '{0}'"
+            if type(name) != unicode:
+                raise ValueError(u"Expected key of type string, got '{0}'"
                                  .format(type(name)))
 
 

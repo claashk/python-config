@@ -1,4 +1,6 @@
+#!/usr/bin/env python2 
 # -*- coding: utf-8 -*-
+
 import unittest
 from config.context import Value
 
@@ -6,12 +8,12 @@ class ValueTestCase(unittest.TestCase):
 
     def setUp(self):
         self.int  = 5
-        self.str  = "string"
+        self.str  = u"string"
         self.float= 5.1
         
-        self.intValue= Value(obj=self, attr="int", type=int, maxCount=3)
-        self.strValue= Value(obj=self, attr="str", type=str)
-        self.floatValue= Value(obj=self, attr="float", type=float)
+        self.intValue= Value(obj=self, attr=u"int", type=int, maxCount=3)
+        self.strValue= Value(obj=self, attr=u"str", type=unicode)
+        self.floatValue= Value(obj=self, attr=u"float", type=float)
 
 
     def test_construction(self):
@@ -21,14 +23,14 @@ class ValueTestCase(unittest.TestCase):
         
     
     def test_parse(self):
-        inputString="123"
+        inputString=u"123"
         self.intValue.enter()
         self.intValue.addContent(inputString)
         self.intValue.leave()
         self.assertEqual(self.int, int(inputString))
         self.assertEqual(self.intValue.count, 1)        
         
-        inputString="12"
+        inputString=u"12"
         self.intValue.enter()
         self.intValue.addContent(inputString)
         self.intValue.leave()
@@ -36,14 +38,14 @@ class ValueTestCase(unittest.TestCase):
         self.assertEqual(self.intValue.count, 2)
         
         self.intValue.enter()
-        self.intValue.addContent("12.5")
+        self.intValue.addContent(u"12.5")
         self.assertRaises(ValueError, self.intValue.leave)
 
         self.assertRaises(IOError, self.intValue.enter)
         self.assertEqual(self.int, 12)
         self.assertEqual(self.intValue.count, 3)
 
-        inputString="a string"
+        inputString=u"a string"
         self.strValue.enter()        
         self.strValue.addContent(inputString[:3])
         self.strValue.addContent(inputString[3:])
@@ -51,7 +53,7 @@ class ValueTestCase(unittest.TestCase):
         self.assertEqual(self.str, inputString)
         self.assertEqual(self.strValue.count, 1)
 
-        inputString="12.123"
+        inputString=u"12.123"
         self.floatValue.enter()
         self.floatValue.addContent(inputString[:4])
         self.floatValue.addContent(inputString[4:])
@@ -62,8 +64,8 @@ class ValueTestCase(unittest.TestCase):
         
         
     def test_contextInterface(self):
-        self.assertRaises(NotImplementedError, self.intValue.getContext, "ctx")
-        self.assertEqual(self.floatValue.help, "")
+        self.assertRaises(NotImplementedError, self.intValue.getContext, u"ctx")
+        self.assertEqual(self.floatValue.help, u"")
         
         x= 0
         for value in self.floatValue:
@@ -77,5 +79,5 @@ def suite():
     return unittest.TestLoader().loadTestsFromTestCase(ValueTestCase)
 
 
-if __name__ == '__main__':
+if __name__ == u'__main__':
     unittest.TextTestRunner(verbosity=2).run( suite() )

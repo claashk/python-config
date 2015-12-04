@@ -1,4 +1,6 @@
+#!/usr/bin/env python2 
 # -*- coding: utf-8 -*-
+
 import unittest
 
 from config.context import Group
@@ -13,11 +15,11 @@ class IgnoreTestCase(unittest.TestCase):
         
 
     def test_contextInterface(self):
-        ctx=self.grp.getContext("section")
+        ctx=self.grp.getContext(u"section")
         ctx.enter()
-        ctx2= ctx.getContext("session2")
+        ctx2= ctx.getContext(u"session2")
         ctx2.enter()
-        ctx2.addContent("something")
+        ctx2.addContent(u"something")
         ctx2.leave()
         ctx.leave()
         
@@ -28,5 +30,5 @@ def suite():
     return unittest.TestLoader().loadTestsFromTestCase(IgnoreTestCase)
 
 
-if __name__ == '__main__':
+if __name__ == u'__main__':
     unittest.TextTestRunner(verbosity=2).run( suite() )

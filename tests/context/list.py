@@ -1,4 +1,6 @@
+#!/usr/bin/env python2 
 # -*- coding: utf-8 -*-
+
 import unittest
 from config.context import List
 
@@ -9,8 +11,8 @@ class ListTestCase(unittest.TestCase):
         self.list1=[]
         self.list2=[]
 
-        self.list1Value= List( self, "list1", int )
-        self.list2Value= List( self, "list2", float, maxCount=3)
+        self.list1Value= List( self, u"list1", int )
+        self.list2Value= List( self, u"list2", float, maxCount=3)
         
         
     def test_construction(self):
@@ -19,7 +21,7 @@ class ListTestCase(unittest.TestCase):
         
     
     def test_parse(self):
-        inputString="123"
+        inputString=u"123"
         self.list1Value.enter()        
         self.list1Value.addContent(inputString)
         self.list1Value.leave()
@@ -34,19 +36,19 @@ class ListTestCase(unittest.TestCase):
         self.assertEqual(self.list2Value.count, 1)
 
         self.list1Value.enter()
-        self.list1Value.addContent("2")
+        self.list1Value.addContent(u"2")
         self.list1Value.leave()
 
         self.list1Value.enter()
-        self.list1Value.addContent("3")
+        self.list1Value.addContent(u"3")
         self.list1Value.leave()
 
         self.list2Value.enter()        
-        self.list2Value.addContent("2.0")
+        self.list2Value.addContent(u"2.0")
         self.list2Value.leave()
         
         self.list2Value.enter()
-        self.list2Value.addContent("4.2")
+        self.list2Value.addContent(u"4.2")
         self.list2Value.leave()
         
         self.assertEqual(self.list1, [int(inputString), 2, 3])
@@ -55,15 +57,15 @@ class ListTestCase(unittest.TestCase):
         self.assertRaises(IOError, self.list2Value.enter)
         
         self.list1Value.enter()
-        self.list1Value.addContent("4")
-        self.list1Value.addContent("4")
+        self.list1Value.addContent(u"4")
+        self.list1Value.addContent(u"4")
         self.list1Value.leave()
         
         self.assertEqual(self.list1, [int(inputString), 2, 3, 44])
         
         
     def test_contextInterface(self):
-        self.assertRaises(NotImplementedError, self.list1Value.getContext, "ctx")
+        self.assertRaises(NotImplementedError, self.list1Value.getContext, u"ctx")
         
 
 def suite():
@@ -72,5 +74,5 @@ def suite():
     return unittest.TestLoader().loadTestsFromTestCase(ListTestCase)
 
 
-if __name__ == '__main__':
+if __name__ == u'__main__':
     unittest.TextTestRunner(verbosity=2).run( suite() )
