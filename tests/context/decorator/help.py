@@ -1,4 +1,6 @@
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+
 import unittest
 from config.context.decorator import Help
 from config.context import Value
@@ -8,13 +10,13 @@ class HelpDecoratorTestCase(unittest.TestCase):
 
     def setUp(self):
         self.int= 1
-        self.intValue= Help( "This is an integer value",
-                              Value(self, "int", int))
+        self.intValue= Help( u"This is an integer value",
+                              Value(self, u"int", int))
 
-        self.group= Help( "This is a group",
-                          Group({"value" : Help("Another int",
+        self.group= Help( u"This is a group",
+                          Group({u"value" : Help(u"Another int",
                                                            Value( self,
-                                                                  "int",
+                                                                  u"int",
                                                                   int) )}))
        
 
@@ -24,7 +26,7 @@ class HelpDecoratorTestCase(unittest.TestCase):
         
     
     def test_parse(self):
-        inputString="123"
+        inputString=u"123"
         self.intValue.enter()        
         self.intValue.addContent(inputString)
         self.intValue.leave()
@@ -33,8 +35,8 @@ class HelpDecoratorTestCase(unittest.TestCase):
         
 
     def test_getValue(self):
-        ctx= self.group.getContext("value")
-        inputString= "12"
+        ctx= self.group.getContext(u"value")
+        inputString= u"12"
         ctx.enter()
         ctx.addContent(inputString)
         ctx.leave()
@@ -48,11 +50,11 @@ class HelpDecoratorTestCase(unittest.TestCase):
         
         
     def test_contextInterface(self):
-        self.assertRaises(NotImplementedError, self.intValue.getContext, "ctx")
-        self.assertRaises(NotImplementedError, self.group.parse, "...")
+        self.assertRaises(NotImplementedError, self.intValue.getContext, u"ctx")
+        self.assertRaises(NotImplementedError, self.group.parse, u"...")
         
-        self.assertEqual(self.intValue.help, "This is an integer value")
-        self.assertEqual(self.group.help, "This is a group")
+        self.assertEqual(self.intValue.help, u"This is an integer value")
+        self.assertEqual(self.group.help, u"This is a group")
         self.assertEqual(self.intValue.content, self.int)
         self.assertEqual(self.group.content, None)
 
@@ -60,7 +62,7 @@ class HelpDecoratorTestCase(unittest.TestCase):
         for name, ctx in self.group:
             count+= 1
             self.assertEqual(ctx.count, 0)
-            self.assertEqual(ctx.help, "Another int")
+            self.assertEqual(ctx.help, u"Another int")
         self.assertEqual(count, 1)
 
 
@@ -70,5 +72,5 @@ def suite():
     return unittest.TestLoader().loadTestsFromTestCase(HelpDecoratorTestCase)
 
 
-if __name__ == '__main__':
+if __name__ == u'__main__':
     unittest.TextTestRunner(verbosity=2).run( suite() )
