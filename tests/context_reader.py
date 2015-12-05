@@ -1,31 +1,33 @@
+#!/usr/bin/env python2 
 # -*- coding: utf-8 -*-
+
 import unittest
+from StringIO import StringIO
 
 from config import XmlWriter, ErrorHandler, DefaultWriter
 from config.context import Group, Value, List, Map
 from config.context.decorator import Help
 from config import ContextReader
 
-from io import StringIO
 
 class ContextReaderTestCase(unittest.TestCase):
 
     def setUp(self):
         self.context= Group( {
-  "value1"
-  : Help("Help message for value 1", Value(self, "val1", int))
+  u"value1"
+  : Help(u"Help message for value 1", Value(self, u"val1", int))
 ,
-  "value2"
-  : Help("A longer help message\n"
-         "Value 2 allows to set another value apart from value 1",
-         Value(self, "val2", float))
+  u"value2"
+  : Help(u"A longer help message\n"
+         u"Value 2 allows to set another value apart from value 1",
+         Value(self, u"val2", float))
 ,
-  "section"
+  u"section"
   : Group( {
-      "value3"
-      : Value(self, "val3", Map({"on" : True, "off" : False}))
+      u"value3"
+      : Value(self, u"val3", Map({u"on" : True, u"off" : False}))
 ,
-      "value4" : List(self, "val4", int) }) })                      
+      u"value4" : List(self, u"val4", int) }) })                      
                           
         self.val1 = 1
         self.val2 = 0.
@@ -41,14 +43,14 @@ class ContextReaderTestCase(unittest.TestCase):
         reader= ContextReader( handler=XmlWriter(os= self.out,
                                                  errorHandler= self.errorHandler ))
         reader(self.context)
-        print(self.out.getvalue())
+        print self.out.getvalue()
         
 
     def test_case2(self):
         reader= ContextReader( handler=DefaultWriter(os= self.out,
                                                      errorHandler= self.errorHandler ))
         reader(self.context)
-        print(self.out.getvalue())
+        print self.out.getvalue()
 
 
 def suite():
@@ -57,5 +59,5 @@ def suite():
     return unittest.TestLoader().loadTestsFromTestCase(ContextReaderTestCase)
 
 
-if __name__ == '__main__':
+if __name__ == u'__main__':
     unittest.TextTestRunner(verbosity=2).run( suite() )

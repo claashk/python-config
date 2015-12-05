@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import re
@@ -14,8 +13,8 @@ class DefaultReader(object):
         commentChar (:class:`str`): Comment character. Defaults to '#'.
     """
     def __init__(self, contentHandler,
-                       assignChar= "=",
-                       commentChar= "#" ):
+                       assignChar= u"=",
+                       commentChar= u"#" ):
                            
         self._impl            = contentHandler
         self._actions         = list()
@@ -76,7 +75,7 @@ class DefaultReader(object):
         self._stack=list()
         self._impl.startDocument()
         self._impl.locator= self._locator
-        self._impl.enterContext("root") #Enter root context
+        self._impl.enterContext(u"root") #Enter root context
         
 
     def endDocument(self):
@@ -84,9 +83,9 @@ class DefaultReader(object):
         """
         #leave root context
         if self._stack:
-            msg= "The following contexts were not closed:\n"
+            msg= u"The following contexts were not closed:\n"
             for name in self._stack:
-                msg= "\n - ".join([msg, name])
+                msg= u"\n - ".join([msg, name])
             self._impl.warn(msg)
 
         self._impl.leaveContext() #leave root context
@@ -111,14 +110,14 @@ class DefaultReader(object):
                     if match:
                         try:
                             action(match)
-                        except Exception as ex:
-                            self._impl.fatalError( str(ex) )
+                        except Exception, ex:
+                            self._impl.fatalError( unicode(ex) )
 
                         self._locator.column+= match.end()
                         break
                 
                 if not match:
-                    self._impl.error("Undefined pattern")
+                    self._impl.error(u"Undefined pattern")
             
 
     def comment(self, match):
@@ -133,13 +132,13 @@ class DefaultReader(object):
 
     def beginBlock(self, match):
         if self._inBlock:
-            raise ValueError("Nested blocks are not allowed")
+            raise ValueError(u"Nested blocks are not allowed")
         
         if self._inAttributes:
-            raise ValueError("Blocks not allowed inside attributes.")
+            raise ValueError(u"Blocks not allowed inside attributes.")
         
         if self._onLhs:
-            raise ValueError("Blocks are not allowed on RHS expressions")
+            raise ValueError(u"Blocks are not allowed on RHS expressions")
         
         self._impl.addContent(match.group(0))
         self._inBlock= True
@@ -147,7 +146,7 @@ class DefaultReader(object):
 
     def endBlock(self, match):
         if not self._inBlock:
-            raise ValueError("Spourious ')'")
+            raise ValueError(u"Spourious ')'")
         
         self._impl.addContent(match.group(0))
         self._inBlock= False
@@ -155,19 +154,19 @@ class DefaultReader(object):
 
     def quoted_identifier(self, match):
         if not self._inAttributes:
-            self._impl.ignoreContent("'")
+            self._impl.ignoreContent(u"'")
         
         self.identifier(match)
         
         if not self._inAttributes:
-            self._impl.ignoreContent("'")
+            self._impl.ignoreContent(u"'")
 
 
     def identifier(self, match):
         if self._inAttributes:
             if self._onLhs:
                 if self._currentAttribute is not None:
-                    raise ValueError("Expected assignment")
+                    raise ValueError(u"Expected assignment")
                     
                 self._currentAttribute= match.group(2)
             else:
@@ -195,7 +194,7 @@ class DefaultReader(object):
             
         if not self._onLhs:
             # An assignment character on RHS shall be quoted
-            raise ValueError("Assignment character on RHS must be quoted")            
+            raise ValueError(u"Assignment character on RHS must be quoted")            
 
         if not self._inAttributes:        
             self.enterContext()
@@ -235,10 +234,10 @@ class DefaultReader(object):
         
         if self._inAttributes:
             if not self._currentAttribute:
-                raise ValueError("Incomplete Attribute")
+                raise ValueError(u"Incomplete Attribute")
             
             if self._attributes.get(self._currentAttribute, None) is None:
-                raise ValueError("Missing value for attribute '{0}'!"
+                raise ValueError(u"Missing value for attribute '{0}'!"
                                  .format(self._currentAttribute))
             
             self._currentAttribute= None
@@ -259,16 +258,16 @@ class DefaultReader(object):
             match: Ignored match object.
         """
         if self._inBlock:
-            raise ValueError("Cannot start context in block")
+            raise ValueError(u"Cannot start context in block")
             
         if not self._onLhs:
-            raise ValueError("Invalid RHS expression")
+            raise ValueError(u"Invalid RHS expression")
             
         if self._inAttributes:
-            raise ValueError("Cannot start scope in attribute")
+            raise ValueError(u"Cannot start scope in attribute")
             
         if len(self._buffer) != 1:
-            raise ValueError("Expected exactly one identifier, got {0}"
+            raise ValueError(u"Expected exactly one identifier, got {0}"
                              .format(len(self._buffer)) )
 
         self._stack.append(self._buffer[0])
@@ -284,14 +283,14 @@ class DefaultReader(object):
         """Called if a closing curly bracket is encountered
         """
         if self._inBlock:
-            raise ValueError("Cannot end scope in block")
+            raise ValueError(u"Cannot end scope in block")
         self._endAssignment() #end assignment if we are on RHS, else do nothing        
 
         if self._attributes:
-            raise ValueError("Cannot end scope in attribute expression.")
+            raise ValueError(u"Cannot end scope in attribute expression.")
 
         if self._buffer:
-            self._impl.addContent("".join(self._buffer))
+            self._impl.addContent(u"".join(self._buffer))
             self._buffer=list()
             
         self._stack.pop()
@@ -313,12 +312,12 @@ class DefaultReader(object):
         if self._inAttributes:
             if not self._currentAttribute:
                 return
-            raise ValueError("Illegal line break before incomplete attribute")
+            raise ValueError(u"Illegal line break before incomplete attribute")
         else:
             self._endAssignment() #If on RHS, end assignment, else do nothing
 
             if self._attributes:
-                raise ValueError("Superflous attributes")
+                raise ValueError(u"Superflous attributes")
     
             # If buffer is not empty, we are facing content without assignment            
             for content in self._buffer:
@@ -335,23 +334,23 @@ class DefaultReader(object):
             return
             
         if self._inBlock:
-            raise ValueError("'[' not allowed in block")
+            raise ValueError(u"'[' not allowed in block")
 
         if self._inAttributes:
-            raise ValueError("Nested attributes are not allowed")
+            raise ValueError(u"Nested attributes are not allowed")
         
         self._inAttributes= True
 
 
     def endAttributes(self, match=None):
         if self._inBlock:
-            raise ValueError("']' not allowed in block")
+            raise ValueError(u"']' not allowed in block")
 
         if not self._inAttributes:
-            raise ValueError("Cannot end attributes.")
+            raise ValueError(u"Cannot end attributes.")
             
         if not self._onLhs:
-            raise ValueError("Incomplete attributes")
+            raise ValueError(u"Incomplete attributes")
         
         self._inAttributes= False
         

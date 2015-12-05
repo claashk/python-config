@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from .error_handler import ErrorHandler
@@ -22,8 +21,8 @@ class DefaultWriter(object):
     """
     def __init__(self, os=stdout,
                        errorHandler=ErrorHandler(),
-                       assignChar= "=",
-                       commentChar= "#" ):
+                       assignChar= u"=",
+                       commentChar= u"#" ):
 
         self._errorHandler= errorHandler
         self._os   = os
@@ -67,8 +66,8 @@ class DefaultWriter(object):
             self._buffer.append(name)
         
             if attrs:
-                self._buffer.append("[{0}] "
-                                    .format(", ".join(self._iterAttrs(attrs)) ))            
+                self._buffer.append(u"[{0}] "
+                                    .format(u", ".join(self._iterAttrs(attrs)) ))            
 
             self._buffer.append(None)
             self._state= PENDING
@@ -85,7 +84,7 @@ class DefaultWriter(object):
             self._beginAssignment()
             
             if not self._foundContent:
-                self._os.write("''")
+                self._os.write(u"''")
 
         self._foundContent= False
 
@@ -94,7 +93,7 @@ class DefaultWriter(object):
             return
 
         if self._state != IN_ASSIGNMENT:
-            self._os.write("}")
+            self._os.write(u"}")
 
         self._state= IN_CONTEXT
         
@@ -113,10 +112,10 @@ class DefaultWriter(object):
             self._foundContent= True
             
         if self._state == PENDING:
-            if "(" in content:
+            if u"(" in content:
                 self._beginAssignment()
                 self._os.write(content)
-            elif "\n" in content:
+            elif u"\n" in content:
                 self._beginContext()
                 self._os.write(content)
             else:
@@ -134,7 +133,7 @@ class DefaultWriter(object):
         if self._state == PENDING:
             self._beginContext()
             
-        self._os.write("{0}{1}".format(self._commentChar, comment))
+        self._os.write(u"{0}{1}".format(self._commentChar, comment))
 
 
     def ignoreContent(self, content):
@@ -186,7 +185,7 @@ class DefaultWriter(object):
             String containing key-value pair
         """
         for key, value in sorted(attrs.items()):
-            yield "{0}='{1}'".format(key, value)
+            yield u"{0}='{1}'".format(key, value)
 
             
     def _dumpBuffer(self, fill=u"<?>"):

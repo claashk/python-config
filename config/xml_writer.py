@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from xml.sax.saxutils import XMLGenerator
@@ -19,7 +18,7 @@ class XmlWriter(object):
     def __init__(self, os=stdout, errorHandler=ErrorHandler()):
         self._errorHandler= errorHandler
 
-        self._impl= XMLGenerator(os, encoding="utf-8")
+        self._impl= XMLGenerator(os, encoding=u"utf8")
         self._stack= []
                            
 
@@ -65,7 +64,7 @@ class XmlWriter(object):
         Arguments:
             comment(:class:`str`): String containing comment
         """
-        self._impl.ignorableWhitespace("<!--{0}-->".format(comment))
+        self._impl.ignorableWhitespace(u"<!--{0}-->".format(comment))
         
 
     def ignoreContent(self, content):

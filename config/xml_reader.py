@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from xml.sax.handler import ContentHandler as SaxContentHandler
@@ -77,11 +76,11 @@ class XmlReader(SaxContentHandler, SaxErrorHandler):
         
         
     def startPrefixMapping(self, prefix, uri):
-        raise NotImplementedError("Prefix mapping is not supported")
+        raise NotImplementedError(u"Prefix mapping is not supported")
         
 
     def endPrefixMapping(self, prefix):
-        raise NotImplementedError("Prefix mapping is not supported")
+        raise NotImplementedError(u"Prefix mapping is not supported")
 
 
     def startElement(self, name, attrs):
@@ -158,7 +157,7 @@ class XmlReader(SaxContentHandler, SaxErrorHandler):
         section 2.8) or a text declaration (XML 1.0, section 4.3.1) using this
         method.
         """
-        raise NotImplementedError("Processing Instructions are not supported")
+        raise NotImplementedError(u"Processing Instructions are not supported")
 
     
     def error(self, exception):
@@ -176,7 +175,7 @@ class XmlReader(SaxContentHandler, SaxErrorHandler):
         Arguments:
             exception (:class:`SaxParseException`): Exception object
         """
-        self._impl.error( "Line {0}:{1}:\n:{2}\n\n"
+        self._impl.error( u"Line {0}:{1}:\n:{2}\n\n"
                           .format( exception.getLineNumber(),
                                    exception.getColumnNumber(),
                                    exception.getMessage()  ))
@@ -214,7 +213,7 @@ class XmlReader(SaxContentHandler, SaxErrorHandler):
         Arguments:
             exception (:class:`SaxParseException`): Exception object
         """
-        self._impl.warn( "Line {0}:{1}:\n:{2}"
+        self._impl.warn( u"Line {0}:{1}:\n:{2}"
                          .format( exception.getLineNumber(),
                                   exception.getColumnNumber(),
                                   exception.getMessage()  ))

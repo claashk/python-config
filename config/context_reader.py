@@ -31,7 +31,7 @@ class ContextReader(object):
         return self._indentCount * self._indentSize * u" "
    
    
-    def _dispatch(self, context, name="root"):
+    def _dispatch(self, context, name=u"root"):
         self._comment( context.help )
         self._handler.ignoreContent(self.indent)
         self._handler.enterContext(name, attrs=self._attrs)
@@ -43,7 +43,7 @@ class ContextReader(object):
             self._handler.ignoreContent(u"\n")
 
         if context.content is not None: 
-            self._handler.addContent( str(context.content) )
+            self._handler.addContent( unicode(context.content) )
 
         for ctxName, ctx in context:
             self._dispatch(ctx, ctxName)
@@ -70,17 +70,17 @@ class ContextReader(object):
         """
         maxLen= self._maxLineLength - self._indentCount * self._indentSize - 1
         
-        for line in comment.split("\n"):
+        for line in comment.split(u"\n"):
             pos= 0
             end= len(line)
             x=pos
             
             while(x != end):
                 if end - pos > maxLen:
-                    x= line.rfind(" ", pos, pos + maxLen)
+                    x= line.rfind(u" ", pos, pos + maxLen)
 
                     if x == -1:
-                        x= line.find(" ", pos + maxLen)
+                        x= line.find(u" ", pos + maxLen)
                     
                     if x == -1:
                         x=end
@@ -89,5 +89,5 @@ class ContextReader(object):
 
                 self._handler.ignoreContent(self.indent)
                 self._handler.addComment(line[pos:x])
-                self._handler.ignoreContent("\n")
+                self._handler.ignoreContent(u"\n")
                 pos= x + 1

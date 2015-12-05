@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from sys import stderr
-
 from .error import ContextError
 
 
@@ -104,4 +103,3 @@ class ErrorHandler(object):
             
         stream.write(u"In line {0}:{1}:\n".format(self.locator.line,
                                                   self.locator.column) )
-

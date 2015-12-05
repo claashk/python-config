@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 class ConfigError(Exception):
@@ -22,7 +21,7 @@ class ConfigError(Exception):
     @property
     def line(self):
         if self.args[1] is None:
-            return "?"
+            return u"?"
             
         return self.args[1].line
         
@@ -30,13 +29,13 @@ class ConfigError(Exception):
     @property
     def column(self):
         if self.args[1] is None:
-            return "?"
+            return u"?"
         
         return self.args[1].column
 
 
     def __str__(self):
-        return "In line {0}:{1}: {2}".format( self.line,
+        return u"In line {0}:{1}: {2}".format( self.line,
                                               self.column,
                                               self.message )
 

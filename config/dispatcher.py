@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from .error_handler import ErrorHandler
@@ -30,7 +29,7 @@ class Dispatcher(object):
         try:
             return self._stack[-1]
         except IndexError:
-            self.fatalError("No active context!")
+            self.fatalError(u"No active context!")
             
 
     @property
@@ -52,7 +51,7 @@ class Dispatcher(object):
         self._stack=list()
         
         if not self._root:
-            self.fatalError("Missing root context")
+            self.fatalError(u"Missing root context")
         
         self._root.reset()
         
@@ -66,12 +65,10 @@ class Dispatcher(object):
             :class:`~.ContextError` if the context stack is not empty
         """
         if self._stack:
-            self.warn("{0} context(s) were not closed properly."
+            self.warn(u"{0} context(s) were not closed properly."
                       .format(len(self._stack)))
 
         self.locator= None
-
-        
 
 
     def enterContext(self, name, attrs=None):
@@ -89,19 +86,19 @@ class Dispatcher(object):
         if self._stack:
             try:
                 self._stack.append( self.currentContext.getContext(name) )
-            except Exception as ex:
-                self.fatalError( str(ex) )
+            except Exception, ex:
+                self.fatalError( unicode(ex) )
         else:
             self._stack.append( self._root )
             
         try:
             self.currentContext.enter(attrs=attrs)
-        except ConfigWarning as ex:
+        except ConfigWarning, ex:
             self.warn( ex.message )
-        except ConfigError as ex:
+        except ConfigError, ex:
             self.fatalError( ex.message )
-        except Exception as ex:
-            self.fatalError( str(ex) )
+        except Exception, ex:
+            self.fatalError( unicode(ex) )
 
     
     def leaveContext(self):
@@ -112,12 +109,12 @@ class Dispatcher(object):
         """
         try:
             self.currentContext.leave()
-        except ConfigWarning as ex:
+        except ConfigWarning, ex:
             self.warn( ex.message )
-        except ConfigError as ex:
+        except ConfigError, ex:
             self.fatalError( ex.message )
-        except Exception as ex:
-            self.fatalError( str(ex) )
+        except Exception, ex:
+            self.fatalError( unicode(ex) )
                
         self._stack.pop() 
             

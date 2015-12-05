@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from .default_reader import DefaultReader
@@ -10,7 +9,7 @@ class IniReader(DefaultReader):
     Arguments:
         contentHandler (:class:`~.ContentHandler`): Content handler.   
     """
-    def __init__(self, contentHandler, assignChar='=', commentChar=';'):
+    def __init__(self, contentHandler, assignChar=u'=', commentChar=u';'):
 
         super(IniReader, self).__init__( contentHandler=contentHandler,
                                          assignChar=assignChar,

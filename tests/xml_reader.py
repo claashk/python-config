@@ -1,5 +1,10 @@
+#!/usr/bin/env python2 
 # -*- coding: utf-8 -*-
+
 import unittest
+from io import StringIO
+from xml.sax import parseString
+
 from config.context import Value
 from config.context import List
 from config.context import Group
@@ -8,10 +13,6 @@ from config.context import Ignore
 from config import XmlReader, ErrorHandler, Dispatcher
 from config.error import ContextError
 
-
-from io import StringIO
-
-from xml.sax import parseString
 
 class XmlReaderTestCase(unittest.TestCase):
 
@@ -26,37 +27,37 @@ class XmlReaderTestCase(unittest.TestCase):
         
         self.handler1= Dispatcher(
             context= Group({
-                "value1"  : Value(self, "val1", int),
-                "value2"  : Value(self, "val2", float),
-                "section" : Group( {
-                    "value3" : Value(self, "val3", Map({"on":True, "off":False})),
-                    "value4" : List(self, "val4", int) }) }),
+                u"value1"  : Value(self, u"val1", int),
+                u"value2"  : Value(self, u"val2", float),
+                u"section" : Group( {
+                    u"value3" : Value(self, u"val3", Map({u"on":True, u"off":False})),
+                    u"value4" : List(self, u"val4", int) }) }),
             errorHandler=ErrorHandler( out=self.stdout, err=self.stderr ))         
 
         self.handler2= Dispatcher(
              context= Group({
-                "value1"  : Value(self, "val1", int),
-                "value2"  : Value(self, "val2", float),
+                u"value1"  : Value(self, u"val1", int),
+                u"value2"  : Value(self, u"val2", float),
                 None      : Ignore(),
-                "section" : Group( {
-                    "value3" : Value(self, "val3", Map({"on":True, "off":False})),
-                    "value4" : List(self, "val4", int) }) }),
+                u"section" : Group( {
+                    u"value3" : Value(self, u"val3", Map({u"on":True, u"off":False})),
+                    u"value4" : List(self, u"val4", int) }) }),
              errorHandler= ErrorHandler(out=self.stdout, err=self.stderr))                      
 
                                                   
     def test_case1(self):
-        str1= bytes(
-            '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'
-            '<root>\r\n'
-            '  <value1>5</value1>\r\n'
-            '  <value2>1.23</value2>\n'
-            '  <section>\n'
-            '    <value3>on</value3>\n'
-            '    <value4>1</value4>\n'
-            '    <value4>2</value4>\n'
-            '    <value4>42</value4>\n'
-            '  </section>\n'
-            '</root>'.encode("utf-8") )
+        str1= str(
+            u'<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'
+            u'<root>\r\n'
+            u'  <value1>5</value1>\r\n'
+            u'  <value2>1.23</value2>\n'
+            u'  <section>\n'
+            u'    <value3>on</value3>\n'
+            u'    <value4>1</value4>\n'
+            u'    <value4>2</value4>\n'
+            u'    <value4>42</value4>\n'
+            u'  </section>\n'
+            u'</root>'.encode(u"utf-8") )
 
         parseString(str1, XmlReader(self.handler1))
 #        except Exception as ex:
@@ -67,33 +68,33 @@ class XmlReaderTestCase(unittest.TestCase):
         self.assertEqual(self.val2, 1.23)
         self.assertEqual(self.val3, True)
         self.assertEqual(self.val4, [1,2,42])
-        self.assertEqual(self.stderr.getvalue(), "")
-        self.assertEqual(self.stdout.getvalue(), "")
+        self.assertEqual(self.stderr.getvalue(), u"")
+        self.assertEqual(self.stdout.getvalue(), u"")
 
 
     def test_case2(self):
-        str1= bytes(
-            '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'
-            '<root>\r\n'
-            '  <value1>5</value1>\r\n'
-            '  <value2>1.23</value2>\n'
-            '  <section>\n'
-            '    <value3>on</value3>\n'
-            '    <value4>1\n'
-            '    <value4>2</value4>\n'
-            '    <value4>42</value4>\n'
-            '  </section>\n'
-            '</root>'.encode("utf-8") )
+        str1= str(
+            u'<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'
+            u'<root>\r\n'
+            u'  <value1>5</value1>\r\n'
+            u'  <value2>1.23</value2>\n'
+            u'  <section>\n'
+            u'    <value3>on</value3>\n'
+            u'    <value4>1\n'
+            u'    <value4>2</value4>\n'
+            u'    <value4>42</value4>\n'
+            u'  </section>\n'
+            u'</root>'.encode(u"utf-8") )
 
-        msg= ""
+        msg= u""
         try:
             parseString(str1, XmlReader(self.handler2))
-        except ContextError as ex:
-            msg= str(ex)
-        self.assertTrue( "Sub context not supported" in msg )
+        except ContextError, ex:
+            msg= unicode(ex)
+        self.assertTrue( u"Sub context not supported" in msg )
         
-        self.assertEqual(self.stderr.getvalue(), "")
-        self.assertEqual(self.stdout.getvalue(), "")
+        self.assertEqual(self.stderr.getvalue(), u"")
+        self.assertEqual(self.stdout.getvalue(), u"")
 
 
 
@@ -103,5 +104,5 @@ def suite():
     return unittest.TestLoader().loadTestsFromTestCase(XmlReaderTestCase)
 
 
-if __name__ == '__main__':
+if __name__ == u'__main__':
     unittest.TextTestRunner(verbosity=2).run( suite() )

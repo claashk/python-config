@@ -1,5 +1,5 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
+
 from .dispatcher import Dispatcher
 from .xml_reader import XmlReader
 from .error_handler import ErrorHandler

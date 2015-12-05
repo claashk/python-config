@@ -1,13 +1,13 @@
+#!/usr/bin/env python2 
 # -*- coding: utf-8 -*-
+
 import unittest
+from io import StringIO
+from xml.sax import parseString
 
 from config import XmlWriter, XmlReader
 from config import DefaultReader
 
-
-from io import StringIO
-
-from xml.sax import parseString
 
 class XmlWriterTestCase(unittest.TestCase):
 
@@ -18,18 +18,18 @@ class XmlWriterTestCase(unittest.TestCase):
 
                                                   
     def test_case1(self):
-        str1= bytes(
-            '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'
-            '<root>\r\n'
-            '  <value1>5</value1>\r\n'
-            '  <value2>1.23</value2>\n'
-            '  <section first="1" second="long string">\n'
-            '    <value3>on</value3>\n'
-            '    <value4>1</value4>\n'
-            '    <value4>2</value4>\n'
-            '    <value4>42</value4>\n'
-            '  </section>\n'
-            '</root>'.encode("utf-8") )
+        str1= str(
+            u'<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'
+            u'<root>\r\n'
+            u'  <value1>5</value1>\r\n'
+            u'  <value2>1.23</value2>\n'
+            u'  <section first="1" second="long string">\n'
+            u'    <value3>on</value3>\n'
+            u'    <value4>1</value4>\n'
+            u'    <value4>2</value4>\n'
+            u'    <value4>42</value4>\n'
+            u'  </section>\n'
+            u'</root>'.encode(u"utf-8") )
 
         parseString(str1, XmlReader(self.handler1))
 
@@ -57,5 +57,5 @@ def suite():
     return unittest.TestLoader().loadTestsFromTestCase(XmlWriterTestCase)
 
 
-if __name__ == '__main__':
+if __name__ == u'__main__':
     unittest.TextTestRunner(verbosity=2).run( suite() )
