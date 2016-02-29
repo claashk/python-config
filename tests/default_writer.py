@@ -40,20 +40,22 @@ class DefaultWriterTestCase(unittest.TestCase):
         parseString(str1, XmlReader(self.handler1))
 
         expected=str(
-            "\n"
+            "root {\n"
             "  value1= 5\n"
             "  value2= 1.23\n"
-            "  section[first='1', second='long string'] {\n"
+            "  section[first=\"1\", second=\"long string\"] {\n"
             "    value3= on\n"
-            "    value4= 1 \n"
-            "    value4= 2  \n"
-            "    value4= 42   \n"
+            "    value4= 1\n"
+            "    value4= 2\n"
+            "    value4= 42\n"
             "    value5= A very long string\n"
             "    value5= \"A very long string\"\n"
-            "    value6= ''\n"
+            "    value6= \"\"\n"
             "  }\n"
-            "  f= sin(arg1= 1, arg2= 3)\n")
+            "  f= sin(arg1= 1, arg2= 3)\n"
+            "}\n")
 
+        #print( self.out.getvalue() )
         self.assertEqual(self.out.getvalue(), expected)
         self.assertEqual(self.err.getvalue(), "")
 
@@ -78,24 +80,26 @@ class DefaultWriterTestCase(unittest.TestCase):
             '} \n' )
 
         expected= str(
-            "value1= 5\r\n"
-            "value2= 1.23\n"
-            "section[first='1', second='long string'] {\n"
-            "  value3= 'on'\n"
-            "  value4= 1# with comment \n"
-            "  # A comment line \n"
-            "\n"
-            "  value4= 2\n"
-            "  value4= 42\n"
-            "  value5= \'A very long quoted string\' \n"
-            "  value6= ''\n"
-            "  func= sin(arg1=1,arg2=2)\n"
-            "  f= sin(arg1='xxx with space',\n"
-            "         arg2= 55.123)  \n"
+            "root {\n"
+            "  value1= 5\n"
+            "  value2= 1.23\n"
+            "  section[first=\"1\", second=\"long string\"] {\n"
+            "    value3= on\n"
+            "    value4= 1\n"
+            "    # with comment \n"
+            "    # A comment line \n"
+            "    value4= 2\n"
+            "    value4= 42\n"
+            "    value5= A very long quoted string\n"
+            "    value6= \"\"\n"
+            "    func= sin(arg1=1,arg2=2)\n"
+            "    f= sin(arg1=\"xxx with space\",arg2= 55.123)\n"
+            "  }\n"
             "}\n" )
 
         reader= DefaultReader(self.handler1)
         reader.parse(str1)
+        #print(self.out.getvalue())
         self.assertEqual(self.out.getvalue(), expected)
         self.assertEqual(self.err.getvalue(), "")
         
@@ -114,20 +118,23 @@ class DefaultWriterTestCase(unittest.TestCase):
             '  value5= \'A very long quoted string\' \n' )
 
         expected= str(
-            "value1= 5\r\n"
-            "value2= 1.23 \n"
-            "section{\n"
-            "  value3= 'on'\n"
-            "  value4= 1 # with comment \n"
-            "  # A comment line \n"
-            "  \n"
-            "  value4= 2 \n"
-            "  value4= 42  \n"
-            "  value5= \'A very long quoted string\' \n"
-            "}" )
+            "root {\n"
+            "  value1= 5\n"
+            "  value2= 1.23\n"
+            "  section {\n"
+            "    value3= on\n"
+            "    value4= 1\n"
+            "    # with comment \n"
+            "    # A comment line \n"
+            "    value4= 2\n"
+            "    value4= 42\n"
+            "    value5= A very long quoted string\n"
+            "  }\n"
+            "}\n")
 
         reader= IniReader(self.handler1)
         reader.parse(str1)
+        #print(self.out.getvalue())
         self.assertEqual(self.out.getvalue(), expected)
         self.assertEqual(self.err.getvalue(), "")
 

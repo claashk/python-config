@@ -122,7 +122,10 @@ class XmlReader(SaxContentHandler, SaxErrorHandler):
             content (str): may be a :class:`string` or :class:`bytes` instance;
                the expat reader module always produces strings               
         """
-        self._impl.addContent(content)
+        if content.isspace():
+            self._impl.ignoreContent(content)
+        else:
+            self._impl.addContent(content)
 
         
     def ignorableWhitespace(self, whitespace):

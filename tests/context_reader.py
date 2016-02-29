@@ -41,14 +41,14 @@ class ContextReaderTestCase(unittest.TestCase):
         reader= ContextReader( handler=XmlWriter(os= self.out,
                                                  errorHandler= self.errorHandler ))
         reader(self.context)
-        print(self.out.getvalue())
+        #print(self.out.getvalue())
         
 
     def test_case2(self):
         reader= ContextReader( handler=DefaultWriter(os= self.out,
                                                      errorHandler= self.errorHandler ))
         reader(self.context)
-        print(self.out.getvalue())
+        #print(self.out.getvalue())
 
 
 def suite():

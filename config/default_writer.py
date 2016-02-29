@@ -1,18 +1,12 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-
-from .error_handler import ErrorHandler
-from .error import ContextError
-
 from sys import stdout
 
-NO_CONTEXT    = 0
-PENDING       = 1
-IN_CONTEXT    = 2
-IN_ASSIGNMENT = 3
+from .error_handler import ErrorHandler
+from .writer_base import WriterBase
 
 
-class DefaultWriter(object):
+class DefaultWriter(WriterBase):
     """Default writer for ASCII files
     
     Fulfills the Dispatcher interface.
@@ -25,160 +19,91 @@ class DefaultWriter(object):
                        assignChar= "=",
                        commentChar= "#" ):
 
-        self._errorHandler= errorHandler
-        self._os   = os
-        self._assignChar= assignChar
-        self._commentChar= commentChar
-        self._state= NO_CONTEXT
-        self._buffer= []
-        self._level= 0
-        self._foundContent= False
-                           
-
-    @property
-    def locator(self):
-        return self._errorHandler.locator
-
-
-    @locator.setter
-    def locator(self, locator):
-        self._errorHandler.locator= locator
+        super().__init__(errorHandler)
+        self._os           = os
+        self._assignChar   = assignChar
+        self._commentChar  = commentChar
+        self._indentSize   = 2
+        self._currentIndent= ""
 
 
     def startDocument(self):
-        self._state= NO_CONTEXT
-        self._level= 0
-        self._buffer.clear()
-        self._foundContent= False
-    
-    
-    def endDocument(self):
-        return
-    
-    
-    def enterContext(self, name, attrs=None):
-        if self._state == PENDING:
-            # This is a sub-context, so the parent cannot be an assignment
-            self._beginContext()
+        """Start new document
+        """
+        super().startDocument()
+        self._currentIndent= ""
 
-        if self._level == 0:
-            self._state= IN_CONTEXT
-        else:
-            self._buffer.append(name)
+    
+    def enterLeaf(self, name, attrs=None):
+        """Enter leaf node
         
-            if attrs:
-                self._buffer.append("[{0}] "
-                                    .format(", ".join(self._iterAttrs(attrs)) ))            
+        Arguments:
+            name (:class:`str`): Name of node
+            attrs (:class:`dict`): Optional attributes
+        """
+        self.indent()
+        self._os.write(name)
 
-            self._buffer.append(None)
-            self._state= PENDING
+        if attrs:
+            self._os.write("[{0}]".format(", ".join(self._iterAttrs(attrs)) ))
+
+        self._os.write("{0} ".format(self._assignChar) )
         
-        self._level+= 1
                    
+    def enterBranch(self, name, attrs=None):
+        """Enter branch node
         
-    def leaveContext(self):
-        self._level-= 1
+        Arguments:
+            name (:class:`str`): Name of node
+            attrs (:class:`dict`): Optional attributes
+        """
+        self.indent()
+        self._os.write(name)
 
-        if self._state == PENDING:
-            # There has been neither a newline nor a sub context in this
-            # context -> Assume it's an assignment
-            self._beginAssignment()
-            
-            if not self._foundContent:
-                self._os.write("''")
+        if attrs:
+            self._os.write("[{0}]".format(", ".join(self._iterAttrs(attrs)) ))
 
-        self._foundContent= False
-
-        if self._level == 0:
-            self._state= NO_CONTEXT
-            return
-
-        if self._state != IN_ASSIGNMENT:
-            self._os.write("}")
-
-        self._state= IN_CONTEXT
+        self._os.write(" {\n")
+        self._currentIndent= "".join([ self._currentIndent,
+                                       self._indentSize * " " ])
         
+        
+    def exitLeaf(self):
+        """Exit current leaf node
+        """
+        self._os.write("\n")
+
+        
+    def exitBranch(self):
+        """Exit current branch node
+        """
+        self._currentIndent= self._currentIndent[:-self._indentSize]
+        self.indent()
+        self._os.write("}\n")
 
 
-    def addContent(self, content):
+    def writeContent(self, content):
         """Add content to current context
 
         Arguments:
             content(:class:`str`): String containing content
         """
-        if not content:
-            return
-        
-        if not content.isspace():
-            self._foundContent= True
-            
-        if self._state == PENDING:
-            if "(" in content:
-                self._beginAssignment()
-                self._os.write(content)
-            elif "\n" in content:
-                self._beginContext()
-                self._os.write(content)
-            else:
-                self._buffer.append(content)
+        if not content or content.startswith(" ") or content.endswith(" "):
+            self._os.write( "\"{0}\"".format(content) )
         else:
             self._os.write(content)
+        
        
-       
-    def addComment(self, comment):
+    def writeComment(self, comment):
         """Add comment to current context
 
         Arguments:
             comment(:class:`str`): String containing comment
         """
-        if self._state == PENDING:
-            self._beginContext()
-            
-        self._os.write("{0}{1}".format(self._commentChar, comment))
+        self.indent()
+        self._os.write("{0}{1}\n".format(self._commentChar, comment))
 
 
-    def ignoreContent(self, content):
-        """Add ignorable content to current context
-
-        Arguments:
-            content(:class:`str`): String containing potentially ignorable
-               content
-        """
-        self.addContent(content)
-               
-        
-    def warn(self, message, level=0):
-        """Report warning messages
-
-        Arguments:
-            message (str): Error message. Passed verbatim to errorHandler
-            level (int): Log level. Passed verbatim to errorHandler            
-        """        
-        self._errorHandler.warn(message, level)
-        
-        
-    def error(self, message, level=0):
-        """Report an error
-        
-        Arguments:
-            message (str): Error message. Passed verbatim to errorHandler
-            level (int): Log level. Passed verbatim to errorHandler            
-        """
-        self._errorHandler.error(message, level)
-        
-        
-    def fatalError(self, message):
-        """Report a fatal error
-
-        Arguments:
-            message (str): Error message
-            
-        Raise:
-            ContextError
-        """
-        raise ContextError(message, self.locator)
-            
-            
     def _iterAttrs(self, attrs):
         """Iterate over attributes
         
@@ -186,39 +111,10 @@ class DefaultWriter(object):
             String containing key-value pair
         """
         for key, value in sorted(attrs.items()):
-            yield "{0}='{1}'".format(key, value)
+            yield "{0}=\"{1}\"".format(key, value)
 
             
-    def _dumpBuffer(self, fill="<?>"):
-        """Dump buffer content to output stream and clear buffer
-        
-        Arguments:
-            fill (:class:`str`): Fill character for None fields 
+    def indent(self):
+        """Print indentation level
         """
-        for string in self._buffer:
-            if string is None:
-                self._os.write(fill)
-            else:
-                self._os.write(string)
-        self._buffer.clear()
-        
-        
-    def _beginAssignment(self):
-        """Begin a new assignment
-        
-        Writes the assignment character followed by a start string character
-        and dumps the buffer. Finally the current state is set to IN_ASSIGNMENT.
-        """
-        self._dumpBuffer( "{0} ".format(self._assignChar) )
-        self._state= IN_ASSIGNMENT
-        
-        
-    def _beginContext(self):
-        """Begin a new context
-        
-        Writes an opening curly bracket followed by the buffer content to the
-        output stream. The current state is set to `IN_CONTEXT`.        
-        """
-        self._dumpBuffer("{")
-        self._state= IN_CONTEXT
-        
+        self._os.write( self._currentIndent )

@@ -149,18 +149,18 @@ class DefaultReader(object):
         if not self._inBlock:
             raise ValueError("Spourious ')'")
         
-        self._impl.addContent(match.group(0))
+        self._impl.addContent(")")
         self._inBlock= False
 
 
     def quoted_identifier(self, match):
-        if not self._inAttributes:
-            self._impl.ignoreContent("'")
+        if self._inBlock:
+            self._impl.addContent("\"")
         
         self.identifier(match)
         
-        if not self._inAttributes:
-            self._impl.ignoreContent("'")
+        if self._inBlock:
+            self._impl.addContent("\"")
 
 
     def identifier(self, match):

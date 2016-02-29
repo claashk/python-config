@@ -14,12 +14,12 @@ class XmlWriterTestCase(unittest.TestCase):
     def setUp(self):
         self.stdout= StringIO()
         self.stderr= StringIO()
-        self.handler1= XmlWriter()
+        self.handler1= XmlWriter(os=self.stdout)
 
                                                   
     def test_case1(self):
         str1= bytes(
-            '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'
+            '<?xml version="1.0" encoding="utf-8" standalone="no" ?>\n'
             '<root>\r\n'
             '  <value1>5</value1>\r\n'
             '  <value2>1.23</value2>\n'
@@ -31,7 +31,22 @@ class XmlWriterTestCase(unittest.TestCase):
             '  </section>\n'
             '</root>'.encode("utf-8") )
 
+        result= str(
+            '<?xml version="1.0" encoding="utf-8"?>\n'
+            '<root>\n'
+            '  <value1>5</value1>\n'
+            '  <value2>1.23</value2>\n'
+            '  <section first="1" second="long string">\n'
+            '    <value3>on</value3>\n'
+            '    <value4>1</value4>\n'
+            '    <value4>2</value4>\n'
+            '    <value4>42</value4>\n'
+            '  </section>\n'
+            '</root>\n' )
+
         parseString(str1, XmlReader(self.handler1))
+        #print( self.stdout.getvalue() )
+        self.assertEqual(result, self.stdout.getvalue() )
 
 
     def test_case2(self):
@@ -48,8 +63,27 @@ class XmlWriterTestCase(unittest.TestCase):
             '  list = 1,2, 3, 4  , 5\n'
             '}\n')
 
+        result= str(
+            '<?xml version="1.0" encoding="utf-8"?>\n'
+            '<root>\n'
+            '  <value1>5</value1>\n'
+            '  <value2>1.23</value2>\n'
+            '  <section first="1" second="long string"> \n'
+            '    <value3>on</value3>\n'
+            '    <!-- A comment line-->\n'
+            '    <value4>1</value4>\n'
+            '    <value4>2</value4>\n'
+            '    <!-- With comment -->\n'
+            '    <value4>42</value4>\n'
+            '    <list>1,2,3,4,5</list>\n'
+            '  </section>\n'
+            '</root>' )
+
         reader= DefaultReader(self.handler1)
         reader.parse(str1)
+        #print( self.stdout.getvalue() )
+        self.assertEqual(result, self.stdout.getvalue() )
+
 
 def suite():
     """Get Test suite object

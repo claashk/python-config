@@ -5,6 +5,8 @@ from .error_handler import ErrorHandler
 from .error import ContextError, ConfigWarning, ConfigError
 
 
+
+
 class Dispatcher(object):
     """Directs content to the appropriate context.
     
@@ -70,8 +72,6 @@ class Dispatcher(object):
                       .format(len(self._stack)))
 
         self.locator= None
-
-        
 
 
     def enterContext(self, name, attrs=None):
