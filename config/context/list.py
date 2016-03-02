@@ -13,21 +13,20 @@ class List(Value):
            unary functor accepting a string could be passed as well.
         maxCount (:class:`int`): Maximum number of occurences
     """
-    def __init__(self, obj=None,
-                       attr="value",
-                       type=str,
-                       maxCount= -1 ) :
-        super().__init__(obj=obj, attr=attr, type=type, maxCount=maxCount)        
+    def __str__(self):
+        return ", ".join( map(str, getattr(self._obj, self._attr) ))
 
-
-    @property
-    def content(self):
-        """Access current value
+    def parse(self, content=None):
+        """Convert buffered string to desired target type and clear buffer
+        
+        Arguments:
+            content(str): Ignored argument.
+            
+        Return:
+            Content string converted to desired type
         """
-        return ",".join( map(str, getattr(self._obj, self._attr) ))
-
-
-    def leave(self):
-        """Leave list context and assign content
-        """
-        getattr(self._obj, self._attr).append( self.parse() )
+        retval= []
+        for s in self._buffer.decode().split(","):
+            retval.append(self._type(s))
+        self._buffer.clear()        
+        return retval

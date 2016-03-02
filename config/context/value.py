@@ -31,6 +31,11 @@ class Value(Context):
             self._obj= self
         
 
+    def __str__(self):
+        """Convert current content to string"""
+        return str(self.content)
+
+
     @property
     def content(self):
         """Access current value

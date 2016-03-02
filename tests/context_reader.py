@@ -1,36 +1,45 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from config import XmlWriter, ErrorHandler, DefaultWriter
-from config.context import Group, Value, List, Map
+from config import XmlWriter, ErrorHandler, DefaultWriter, Dispatcher
+from config.context import Group, Value, MultiValue, Map, List
 from config.context.decorator import Help
 from config import ContextReader
 
 from io import StringIO
 
+
+class Section(Group):
+    def __init__(self, x=False, l=[], m=[]):
+        self._x= bool(x)
+        self._l= list(l)
+        self._m= list(m)
+        
+        super().__init__( {"map"    : Value(self, "_x", Map({"on":True,
+                                                               "off":False})),
+                           "mValue" : MultiValue(self, "_m", int),
+                           "list"   : List(self, "_l", float) } )
+        
+class TestContext(Group):
+    def __init__(self, v1=0, v2=0, s=Section()):
+        self.v1= v1
+        self.v2= v2
+        self.s = s
+        
+        super().__init__( {"value1"  : Help("Help message for value 1",
+                                           Value(self, "v1", int)),
+                           "value2"  : Help("A longer help message.Value 2 allows to set "
+                                           "another value apart from value 1. This sounds great or not ?",
+                                           Value(self, "v2", float)),
+                           "section" : s} )
+ 
 class ContextReaderTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.context= Group( {
-  "value1"
-  : Help("Help message for value 1", Value(self, "val1", int))
-,
-  "value2"
-  : Help("A longer help message\n"
-         "Value 2 allows to set another value apart from value 1",
-         Value(self, "val2", float))
-,
-  "section"
-  : Group( {
-      "value3"
-      : Value(self, "val3", Map({"on" : True, "off" : False}))
-,
-      "value4" : List(self, "val4", int) }) })                      
-                          
-        self.val1 = 1
-        self.val2 = 0.
-        self.val3 = False
-        self.val4 = [1,2,3,4]
+        
+        self.c1= TestContext(v1= 10, v2= 1.23e-4, s=Section( True,
+                                                             l=[1.,2.,3.,4.],
+                                                             m=[5, 6]))
         
         self.out= StringIO()
         self.err= StringIO()        
@@ -38,17 +47,45 @@ class ContextReaderTestCase(unittest.TestCase):
 
 
     def test_case1(self):
-        reader= ContextReader( handler=XmlWriter(os= self.out,
-                                                 errorHandler= self.errorHandler ))
-        reader(self.context)
-        #print(self.out.getvalue())
-        
+        reader= ContextReader(handler=XmlWriter(os= self.out,
+                                                errorHandler= self.errorHandler))
+        reader(self.c1)
+        result= str(
+            '<?xml version="1.0" encoding="utf-8"?>\n'
+            '<root>\n'
+            '  <!--Help message for value 1-->\n'
+            '  <value1>10</value1>\n'
+            '  <!--A longer help message.Value 2 allows to set another value apart from value 1. This sounds great or not ?-->\n'
+            '  <value2>0.000123</value2>\n'
+            '  <section>\n'
+            '    <map>on</map>\n'
+            '    <mValue>5</mValue>\n'
+            '    <mValue>6</mValue>\n'
+            '    <list>1.0, 2.0, 3.0, 4.0</list>\n'
+            '  </section>\n'
+            '</root>\n' )
+        print(self.out.getvalue())
+        self.assertEqual(result, self.out.getvalue() )
+
 
     def test_case2(self):
         reader= ContextReader( handler=DefaultWriter(os= self.out,
                                                      errorHandler= self.errorHandler ))
-        reader(self.context)
-        #print(self.out.getvalue())
+        reader(self.c1)
+        print(self.out.getvalue())
+
+
+    def test_case3(self):
+        c2= TestContext()
+        reader= ContextReader(handler=Dispatcher(c2,
+                                                 errorHandler= self.errorHandler))
+        reader(self.c1)
+        
+        self.assertEqual(self.c1.s._x, c2.s._x)
+        self.assertEqual(self.c1.s._l, c2.s._l)
+        self.assertEqual(self.c1.s._m, c2.s._m)
+        self.assertEqual(self.c1.v1, c2.v1)
+        self.assertEqual(self.c1.v2, c2.v2)
 
 
 def suite():

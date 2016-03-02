@@ -137,6 +137,8 @@ class Dispatcher(object):
         Arguments:
             comment(:class:`str`): String containing comment
         """
+        if not self._stack:
+            return  #ignore comments before main context
         self.currentContext.ignoreContent(comment)
 
 

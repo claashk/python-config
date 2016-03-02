@@ -17,6 +17,12 @@ class Decorator(Context):
         return iter(self._parent)
 
 
+    def __str__(self):
+        """Convert current decorator to string
+        """
+        return str(self._parent)
+
+
     @property
     def count(self):
         """Return number of times, this key was found

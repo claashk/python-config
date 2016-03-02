@@ -2,7 +2,7 @@
 import unittest
 from config.context import Map
 from config.context import Value
-from config.context import List
+from config.context import MultiValue
 
 
 class MapTestCase(unittest.TestCase):
@@ -16,10 +16,10 @@ class MapTestCase(unittest.TestCase):
                              Map({'Yes' : True, 'No' : False}),
                              maxCount=2 )
                             
-        self.listCtx= List( self,
-                            "list",
-                            Map({'On' : True, 'Off' : False}),
-                            maxCount=3) 
+        self.listCtx= MultiValue( self,
+                                 "list",
+                                 Map({'On' : True, 'Off' : False}),
+                                 maxCount=3) 
         
        
     def test_construction(self):

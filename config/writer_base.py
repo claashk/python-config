@@ -43,12 +43,16 @@ class WriterBase(object):
 
 
     def startDocument(self):
+        """Start a new document
+        """
         self._currentContext= None
         self._pendingContext= None
         self._pendingContent.clear()
     
     
     def endDocument(self):
+        """End current document
+        """
         self._currentContext= None
         return
     
@@ -130,6 +134,9 @@ class WriterBase(object):
         Arguments:
             comment(:class:`str`): String containing comment
         """
+        if not comment:
+            return
+            
         if self._currentContext == LEAF:            
             self.fatalError("Comment not allowed here")
         
@@ -231,6 +238,42 @@ class WriterBase(object):
         raise NotImplementedError("To be implemented by derived class")
 
 
+    def split(self, content, maxLen=80):
+        """Split long content lines
+        
+        Lines are truncated to enable a line length of no more than 80
+        characters. Any additional line breaks are removed.
+        
+        Arguments:
+           content(:class:`str`): Content string to split
+           MaxLen(:class:`int`): Maximum number of characters per line.
+              Defaults to 80.
+              
+        Yield:
+            Line of content
+        """
+        for line in content.split("\n"):
+            pos= 0
+            end= len(line)
+            x=pos
+            
+            while(x != end):
+                if end - pos > maxLen:
+                    x= line.rfind(" ", pos, pos + maxLen)
+
+                    if x == -1:
+                        x= line.find(" ", pos + maxLen)
+                    
+                    if x == -1:
+                        x=end
+                else:
+                    x= end
+
+                yield line[pos:x]
+                pos= x + 1
+        return
+
+
     def _enterBranch(self, name, attrs):
         """Wrapper for enterBranch"""
         self.enterBranch(name, attrs)
@@ -241,3 +284,5 @@ class WriterBase(object):
         """Wrapper for enterBranch"""
         self.enterLeaf(name, attrs)
         self._currentContext= LEAF
+        
+        

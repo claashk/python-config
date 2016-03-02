@@ -68,7 +68,7 @@ class XmlWriterTestCase(unittest.TestCase):
             '<root>\n'
             '  <value1>5</value1>\n'
             '  <value2>1.23</value2>\n'
-            '  <section first="1" second="long string"> \n'
+            '  <section first="1" second="long string">\n'
             '    <value3>on</value3>\n'
             '    <!-- A comment line-->\n'
             '    <value4>1</value4>\n'
@@ -77,7 +77,7 @@ class XmlWriterTestCase(unittest.TestCase):
             '    <value4>42</value4>\n'
             '    <list>1,2,3,4,5</list>\n'
             '  </section>\n'
-            '</root>' )
+            '</root>\n' )
 
         reader= DefaultReader(self.handler1)
         reader.parse(str1)

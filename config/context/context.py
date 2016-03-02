@@ -21,6 +21,11 @@ class Context(object):
         yield #necessary to turn this method into a generator
         
     
+    def __str__(self):
+        """Convert content of current context to string"""
+        return ""
+        
+    
     @property
     def count(self):
         """Return number of times, this key was found
@@ -142,6 +147,9 @@ class Context(object):
         Arguments:
             content (:class:`str`): Content string.
         """
+        if not content:
+            return
+        
         if content.isspace():
             self.ignoreContent(content)
             return

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 from config.context import Value
-from config.context import List
+from config.context import MultiValue
 from config.context import Group
 from config.context import Map
 from config.context import Ignore
@@ -30,7 +30,7 @@ class XmlReaderTestCase(unittest.TestCase):
                 "value2"  : Value(self, "val2", float),
                 "section" : Group( {
                     "value3" : Value(self, "val3", Map({"on":True, "off":False})),
-                    "value4" : List(self, "val4", int) }) }),
+                    "value4" : MultiValue(self, "val4", int) }) }),
             errorHandler=ErrorHandler( out=self.stdout, err=self.stderr ))         
 
         self.handler2= Dispatcher(
@@ -40,7 +40,7 @@ class XmlReaderTestCase(unittest.TestCase):
                 None      : Ignore(),
                 "section" : Group( {
                     "value3" : Value(self, "val3", Map({"on":True, "off":False})),
-                    "value4" : List(self, "val4", int) }) }),
+                    "value4" : MultiValue(self, "val4", int) }) }),
              errorHandler= ErrorHandler(out=self.stdout, err=self.stderr))                      
 
                                                   

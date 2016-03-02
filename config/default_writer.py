@@ -100,8 +100,9 @@ class DefaultWriter(WriterBase):
         Arguments:
             comment(:class:`str`): String containing comment
         """
-        self.indent()
-        self._os.write("{0}{1}\n".format(self._commentChar, comment))
+        for line in self.split(comment, maxLen= 80 - len(self._currentIndent)):
+            self.indent()
+            self._os.write("{0}{1}\n".format(self._commentChar, line))
 
 
     def _iterAttrs(self, attrs):

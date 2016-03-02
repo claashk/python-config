@@ -4,7 +4,7 @@ import unittest
 from io import StringIO
 
 from config.context import Value
-from config.context import List
+from config.context import MultiValue
 from config.context import Group
 from config.context import Map
 from config import IniReader, Dispatcher
@@ -19,7 +19,7 @@ class IniReaderTestCase(unittest.TestCase):
             "section" : Group( {
                 "value3" : Value(self, "val3", Map({"on" : True,
                                                     "off" : False})),
-                "value4" : List(self, "val4", int) }) })                      
+                "value4" : MultiValue(self, "val4", int) }) })                      
                           
         self.val1 = 0
         self.val2 = 0.

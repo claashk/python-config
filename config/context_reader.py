@@ -1,10 +1,11 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .context import Group
+from .context import Map
+from .context import MultiValue
 
 class ContextReader(object):
-    """Reader for :class:`.~Context` objects
+    """Reader for :class:`~Context` objects
     
     Iterates over a context and all sub-contexts and forwards the content to a 
     Dispatcher object.
@@ -15,80 +16,65 @@ class ContextReader(object):
     def __init__(self, handler):
         self._handler= handler
         self._attrs  = dict()
-        self._maxLineLength= 80
-        self._indentSize = 2
-        self._indentCount= 0
 
 
     def __call__(self, context):
-        self._indentCount= 0
+        """Invoke reader
+        
+        Arguments:
+            context (:class:`~Context`): Context to dispatch
+        """
         self._handler.startDocument()
         self._dispatch(context)
         self._handler.endDocument()
 
-
-    @property
-    def indent(self):
-        return self._indentCount * self._indentSize * " "
-   
    
     def _dispatch(self, context, name="root"):
-        self._comment( context.help )
-        self._handler.ignoreContent(self.indent)
-        self._handler.enterContext(name, attrs=self._attrs)
-
-        isGroup= isinstance(context, Group)
-        
-        if isGroup:
-            self._indentCount+= 1
-            self._handler.ignoreContent("\n")
-
-        if context.content is not None: 
-            self._handler.addContent( str(context.content) )
-
-        for ctxName, ctx in context:
-            self._dispatch(ctx, ctxName)
-    
-        if isGroup:
-            self._indentCount-= 1
-            self._handler.ignoreContent(self.indent)
-    
-        self._handler.leaveContext()
-        self._handler.ignoreContent("\n")
-
-
-
-    def _comment(self, comment):
-        """Print long comment lines
-        
-        Lines are truncated to enable a line length of no more than 80
-        characters. Any additional line breaks are removed.
+        """Forward context to dispatcher
         
         Arguments:
-           msg: Message to print as comment
-           stream: Output stream. If None, it is set to self._logStream
-           maxLineLength: Maximum number of characters per line. Defaults to 80.
+           context (:class:`~Context`): context to dispatch
+           name (:class:`str`): Name of context to dispatch
         """
-        maxLen= self._maxLineLength - self._indentCount * self._indentSize - 1
+        self._handler.addComment( context.help )
+
+        if isinstance(context, MultiValue):
+            for x in context.content:
+                self._handler.enterContext(name, attrs=self._attrs)
+                self._handler.addContent( str(x) )
+                self._handler.leaveContext()
+            return
+
+        self._handler.enterContext(name, attrs=self._attrs)
         
-        for line in comment.split("\n"):
-            pos= 0
-            end= len(line)
-            x=pos
+        contentType= getattr(context, "_type", None)
+        if isinstance(contentType, Map):
+           self._handler.addContent( self.toString(contentType,
+                                                   context.content ))
+        else:
+           self._handler.addContent( str(context) )
             
-            while(x != end):
-                if end - pos > maxLen:
-                    x= line.rfind(" ", pos, pos + maxLen)
+        for ctxName, ctx in context:
+            self._dispatch(ctx, ctxName)
+            
+        self._handler.leaveContext()
 
-                    if x == -1:
-                        x= line.find(" ", pos + maxLen)
-                    
-                    if x == -1:
-                        x=end
-                else:
-                    x= end
 
-                self._handler.ignoreContent(self.indent)
-                self._handler.addComment(line[pos:x])
-                self._handler.ignoreContent("\n")
-                pos= x + 1
+    @staticmethod
+    def toString(m, content):
+        """Convert current value to string
+        
+        Arguments:
+            m (:class:`Map`): Map object
+            content: content
+            
+        Return:
+            first key in m which whose value matches content. `str(content)`
+            if no such key is found.
+        """
+        for key, value in m._values.items():
+            if value == content:
+                return key
+        
+        return str(content)
+    
