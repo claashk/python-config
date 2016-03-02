@@ -11,11 +11,20 @@ class Group(Context):
         maxCount (int): Maximum number of allowed occurences.
     """
     def __init__(self, contexts=dict(), maxCount=1):
-        super().__init__(maxCount=maxCount)        
-        self._contexts= dict()
-
-        for name, ctx in contexts.items():
-            self.addContext(name, ctx)
+        super().__init__(maxCount=maxCount)
+        
+        #Context cannot be stored as dict, as this would not allow to iterate
+        #over the items in the order in which they were defined. Thus we
+        #use a list in combination with a dictionary for lookup by name
+        self._contexts= []
+        self._contextIndices= dict()
+        
+        if isinstance(contexts, dict):
+            for name, ctx in contexts.items():
+                self.addContext(name, ctx)
+        else:
+            for name, ctx in contexts:
+                self.addContext(name, ctx)
 
 
     def __getitem__(self, name):
@@ -30,7 +39,7 @@ class Group(Context):
         Raise:
             :class:`KeyError` if no context with matching name is found.
         """
-        return self._contexts[name]        
+        return self._contexts[ self._contextIndices[name] ]
         
         
     def __iter__(self):
@@ -39,7 +48,17 @@ class Group(Context):
         Return:
             Iterator object
         """
-        return iter( self._contexts.items() )
+        #create dictionary for reverse lookup of names
+        names= []
+        for name,index in self._contextIndices.items():
+            names.append((index, name))
+        names.sort() #sort in ascending order by indices        
+        
+        #iterate contexts in order of definition
+        for (index, name), ctx in zip(names, self._contexts):
+            yield (name, ctx)
+        
+        return
 
 
     def addContext(self, name, context):
@@ -51,7 +70,12 @@ class Group(Context):
             context (:class:`Context`): Context object to add
             
         """
-        self._contexts[name]= context
+        index= self._contextIndices.get(name)
+        if index is None:
+            self._contextIndices[name]= len(self._contexts)
+            self._contexts.append(context)
+        else:
+            self._contexts[index]= context
 
 
     def reset(self):
@@ -59,7 +83,7 @@ class Group(Context):
         """
         super().reset()
         
-        for name, ctx in self:
+        for ctx in self._contexts:
             ctx.reset()
 
 
@@ -71,7 +95,7 @@ class Group(Context):
         Arguments:
             attrs (:class:`dict`): Attributes
         """
-        for name, ctx in self:
+        for ctx in self._contexts:
             ctx.reset()
 
         super().enter(attrs=attrs)
@@ -91,10 +115,10 @@ class Group(Context):
         Return:
              Context instance
         """
-        retval= self._contexts.get(name, self._contexts.get(None, None))
+        i= self._contextIndices.get(name, self._contextIndices.get(None, None))
 
-        if retval is not None:
-            return retval
+        if i is not None:
+            return self._contexts[i]
         
         raise KeyError("Unknown context '{0}'".format(name))
 

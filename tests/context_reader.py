@@ -15,10 +15,10 @@ class Section(Group):
         self._l= list(l)
         self._m= list(m)
         
-        super().__init__( {"map"    : Value(self, "_x", Map({"on":True,
-                                                               "off":False})),
-                           "mValue" : MultiValue(self, "_m", int),
-                           "list"   : List(self, "_l", float) } )
+        super().__init__( [("map", Value(self, "_x", Map({"on":True,
+                                                          "off":False}) )),
+                           ("mValue", MultiValue(self, "_m", int)),
+                           ("list", List(self, "_l", float)) ] )
         
 class TestContext(Group):
     def __init__(self, v1=0, v2=0, s=Section()):
@@ -26,12 +26,12 @@ class TestContext(Group):
         self.v2= v2
         self.s = s
         
-        super().__init__( {"value1"  : Help("Help message for value 1",
-                                           Value(self, "v1", int)),
-                           "value2"  : Help("A longer help message.Value 2 allows to set "
+        super().__init__( [("value1", Help("Help message for value 1",
+                                           Value(self, "v1", int))),
+                           ("value2", Help("A longer help message.Value 2 allows to set "
                                            "another value apart from value 1. This sounds great or not ?",
-                                           Value(self, "v2", float)),
-                           "section" : s} )
+                                           Value(self, "v2", float))),
+                           ("section", s) ])
  
 class ContextReaderTestCase(unittest.TestCase):
 
@@ -64,7 +64,7 @@ class ContextReaderTestCase(unittest.TestCase):
             '    <list>1.0, 2.0, 3.0, 4.0</list>\n'
             '  </section>\n'
             '</root>\n' )
-        print(self.out.getvalue())
+        #print(self.out.getvalue())
         self.assertEqual(result, self.out.getvalue() )
 
 
@@ -72,7 +72,22 @@ class ContextReaderTestCase(unittest.TestCase):
         reader= ContextReader( handler=DefaultWriter(os= self.out,
                                                      errorHandler= self.errorHandler ))
         reader(self.c1)
-        print(self.out.getvalue())
+        result=str(
+               "root {\n"
+               "  #Help message for value 1\n"
+               "  value1= 10\n"
+               "  #A longer help message.Value 2 allows to set another value apart from value 1.\n"
+               "  #This sounds great or not ?\n"
+               "  value2= 0.000123\n"
+               "  section {\n"
+               "    map= on\n"
+               "    mValue= 5\n"
+               "    mValue= 6\n"
+               "    list= 1.0, 2.0, 3.0, 4.0\n"
+               "  }\n"
+               "}\n" )
+        #print(self.out.getvalue())
+        self.assertEqual(result, self.out.getvalue() )
 
 
     def test_case3(self):

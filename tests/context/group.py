@@ -3,7 +3,7 @@ import unittest
 from config.context import Value
 from config.context import Group
 
-class CollectionTestCase(unittest.TestCase):
+class GroupTestCase(unittest.TestCase):
 
     def setUp(self):
         self.int  = 5
@@ -11,11 +11,12 @@ class CollectionTestCase(unittest.TestCase):
         self.float= 5.1
         self.nestedInt= 0
         
-        self.group= Group( { "integer" : Value(self, "int", int),
-                             "string"  : Value(self, "str", str),
-                             "floater" : Value(self, "float", float),
-                             "section" : Group({
-                                 "integer" : Value(self, "nestedInt", int)}) })
+        self.group= Group([ ("integer", Value(self, "int", int)),
+                            ("string", Value(self, "str", str)),
+                            ("floater", Value(self, "float", float)),
+                            ("section",
+                             Group([( "integer",
+                                      Value(self, "nestedInt", int))  ])) ])
         
     def test_construction(self):
         self.assertEqual(self.group.count, 0)
@@ -101,7 +102,7 @@ class CollectionTestCase(unittest.TestCase):
 def suite():
     """Get Test suite object
     """
-    return unittest.TestLoader().loadTestsFromTestCase(CollectionTestCase)
+    return unittest.TestLoader().loadTestsFromTestCase(GroupTestCase)
 
 
 if __name__ == '__main__':
