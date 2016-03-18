@@ -1,6 +1,4 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from .context import Context
 
 class Group(Context):
@@ -37,9 +35,22 @@ class Group(Context):
             Context matching name
             
         Raise:
-            :class:`KeyError` if no context with matching name is found.
+            :class:`TypeError` if no context with matching name is found.
         """
-        return self._contexts[ self._contextIndices[name] ]
+        return self._contexts[self._index(name)]
+        
+        
+    def __contains__(self, name):
+        """Check if this context contains a subcontext with a given name
+        
+        Arguments:
+            name(str): Name of subcontext to search for
+        
+        Return:
+            bool: ``True`` if and only if ``self`` has a subcontext called
+            `name``
+        """
+        return name in self._contextIndices        
         
         
     def __iter__(self):
@@ -68,9 +79,8 @@ class Group(Context):
             name (str): Context to add. A context with name `None` can be
                added, which will be invoked if no matching context can be found.
             context (:class:`Context`): Context object to add
-            
         """
-        index= self._contextIndices.get(name)
+        index= self._index(name)
         if index is None:
             self._contextIndices[name]= len(self._contexts)
             self._contexts.append(context)
@@ -115,10 +125,49 @@ class Group(Context):
         Return:
              Context instance
         """
-        i= self._contextIndices.get(name, self._contextIndices.get(None, None))
+        i= self._index(name)
 
         if i is not None:
             return self._contexts[i]
         
         raise KeyError("Unknown context '{0}'".format(name))
+        
+        
+    def translate(self, dictionary):
+        """Translate keys into another dialect
+        
+        Translates the names of all subcontexts into another language/dialect.
+        The mapping of new names to old names is provided in terms of a
+        dictionary. Old names, for which no translation is provided in the
+        dictionary will remain valid identifiers, while translated names will
+        replace their counterparts.
+        
+        Arguments:
+            dictionary (dict): Dictionary containing new subcontext names as
+               key and old subcontext names as value.
+               
+        Raise:
+            KeyError: Dictionary maps to an invalid identifier
+        """
+        indices= dict() #new dictionary
+        for newName, oldName in dictionary.items():
+            i= self._contextIndices.pop(oldName)
+            indices[newName]= i
+            
+        #Add old names, for which no translation was provided
+        indices.update( self._contextIndices )
+        self._contextIndices= indices
 
+
+    def _index(self, name):
+        """Get index of subcontext
+        
+        Arguments:
+            name (string): Name of subcontext
+            
+        Return:
+            int: Index of subcontext or ``None``, if ``name`` is not a valid
+            subcontext
+        """
+        return self._contextIndices.get(name,
+                                        self._contextIndices.get(None, None))

@@ -85,12 +85,9 @@ class XmlReaderTestCase(unittest.TestCase):
             '  </section>\n'
             '</root>'.encode("utf-8") )
 
-        msg= ""
-        try:
+        with self.assertRaises(ContextError) as ex:
             parseString(str1, XmlReader(self.handler2))
-        except ContextError as ex:
-            msg= str(ex)
-        self.assertTrue( "Sub context not supported" in msg )
+            self.assertTrue( "Sub context not supported" in str(ex) )
         
         self.assertEqual(self.stderr.getvalue(), "")
         self.assertEqual(self.stdout.getvalue(), "")
