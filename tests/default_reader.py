@@ -3,36 +3,32 @@ import unittest
 
 from io import StringIO
 
-from config.context import Value
-from config.context import MultiValue
-from config.context import Group
-from config.context import Map
-from config import DefaultReader, Dispatcher
-from config import ErrorHandler
+from schema import Validator, node
+from schema.mixins import children, ref
+from schema import DefaultReader
 
 class DefaultReaderTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.context= Group( {
-            "value1"  : Value(self, "val1", int),
-            "value2"  : Value(self, "val2", float),
-            "section" : Group( {
-                "value3" : Value(self, "val3", Map({"on" : True,
-                                                    "off" : False})),
-                "value4" : MultiValue(self, "val4", int) }) })
-                          
+        self.log= StringIO()
+        self.err= StringIO()        
+
         self.val1 = 0
         self.val2 = 0.
         self.val3 = False
         self.val4 = []
         
-        self.log= StringIO()
-        self.err= StringIO()        
-        
-        self.reader= DefaultReader( contentHandler=
-            Dispatcher( context=self.context,
-                        errorHandler=ErrorHandler(out= self.log,
-                                                      err=self.err ) ))                    
+        self.context= node("root") << children()[
+                        node("value1") << ref(self, "val1", int),
+                        node("value2") << ref(self, "val2", float),
+                        node("section") << children() [
+                          node("value3") << ref(self, "val3"),
+                          node("value4") << ref(self, "val4", int)
+                        ]
+                      ]
+        self.validator= Validator(self.context)
+        self.reader= DefaultReader(self.validator)
+
     
     def test_case1(self):
         text=StringIO( "value1 = 5\n"
@@ -47,18 +43,14 @@ class DefaultReaderTestCase(unittest.TestCase):
         self.reader.parse(text)        
         self.assertEqual(self.val1, 5)
         self.assertEqual(self.val2, 4.2)
-        self.assertEqual(self.val3, True)
-        self.assertEqual(self.val4, [3, 4, 5])
-        self.assertEqual(self.context["section"].count, 1)
-        self.assertEqual(self.context["value1"].count, 1)
-        self.assertEqual(self.context["value2"].count, 1)
-        self.assertEqual(self.context["section"]["value3"].count, 1)
-        self.assertEqual(self.context["section"]["value4"].count, 3)
+        self.assertEqual(self.val3, "on")
+        self.assertEqual(self.val4, 5)
         self.assertEqual(self.log.getvalue(), "")
         self.assertEqual(self.err.getvalue(), "")
 
 
     def test_case2(self):
+        self.skipTest("Warnings not implemented yet") #TODO
         text=StringIO( "value1 [att1=attr1, att2='attr2'] = 5\n"
                        "value2 [ att3='one', #comment\n"
                        "        # another comment\n"
@@ -79,8 +71,6 @@ class DefaultReaderTestCase(unittest.TestCase):
         self.assertTrue("'att3' ('one')" in err)        
         self.assertTrue("'att4' ('two')" in err)        
         
-
-
 
 def suite():
     """Get Test suite object

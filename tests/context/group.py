@@ -1,103 +1,100 @@
 # -*- coding: utf-8 -*-
 import unittest
-from config.context import Value
-from config.context import Group
+from config.context import Attribute, attr
+from config.context import Group, grp
+
+class Data(object):
+    pass
 
 class GroupTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.int  = 5
-        self.str  = "string"
-        self.float= 5.1
-        self.nestedInt= 0
-        
-        self.group= Group([ ("integer", Value(self, "int", int)),
-                            ("string", Value(self, "str", str)),
-                            ("floater", Value(self, "float", float)),
-                            ("section",
-                             Group([( "integer",
-                                      Value(self, "nestedInt", int))  ])) ])
+        self.data= Data()
+
+        tmp= grp("root") [
+                 attr("val1", destObj=self.data, valueType= int),
+                 attr("val2", destObj=self.data, valueType= int),
+                 attr("val3", destObj=self.data, valueType= int),
+                 grp("sub1") [
+                     attr("val4", destObj=self.data, valueType= int),
+                     attr("val5", destObj=self.data, valueType= int)
+                 ],
+                 grp("sub2") [
+                     attr("val6", destObj=self.data, valueType= int),
+                     attr("val7", destObj=self.data, valueType= int)
+                 ]
+             ]
+
+        self.group= tmp.context
         
 
-    def setValue(self, key, value, att, grp=None,):
-        if grp is None:
-            grp= self.group
-            
-        ctx= grp.getContext(key)
-        ctx.enter()
-        ctx.addContent( str(value) )
-        ctx.leave()
-        self.assertEqual(getattr(self, att), value)
+    @staticmethod
+    def recurse(g):
+        for child in g:
+            if isinstance(child, Attribute):
+                yield child
+            elif isinstance(child, Group):
+                for grandChild in GroupTestCase.recurse(child):
+                    yield grandChild
+            else:
+                raise RuntimeError("Undefined object")
 
 
     def test_construction(self):
-        self.assertEqual(self.group.count, 0)
+        self.assertEqual(self.group.name, "root")
         
-        count=0
-        for name, ctx in self.group:
-            count+= 1
-            self.assertEqual(ctx.count, 0)
 
-        self.assertEqual(count, 4)    
+        for x, child in enumerate(self.recurse(self.group), 1):
+            self.assertIsNone( getattr(self.data, "val{:d}".format(x)) )
+
+        self.assertEqual(x, 7)
     
     
     def test_getContext(self):
-        self.setValue("integer", 123, "int")
-        self.setValue("string", "a long string", "str")
-        self.setValue("floater", 1.234, "float")
+        ctx= self.group.getContext("val1")
+        ctx.fromString("321")
+        self.assertEqual(self.data.val1, 321)
         
-        ctx=self.group.getContext("section")
-        ctx.enter()
-        self.setValue("integer", 321, "nestedInt", ctx)
-        ctx.leave()        
-
         with self.assertRaises(KeyError):
-            self.group.getContext("xxx")
-        
-        for count, (name, ctx) in enumerate(self.group, 1):
-            self.assertEqual(ctx.count, 1)
-        self.assertEqual(count, 4)
+            ctx= self.group.getContext("doesNotExist")
+
+        ctx= self.group.getContext("val3")
+        ctx.fromString("465")
+        self.assertEqual(self.data.val3, 465)
+
+        ctx= self.group.getContext("sub2")
+        ctx= ctx.getContext("val6")
+        ctx.fromString("555")
+        self.assertEqual(self.data.val6, 555)
 
         
     def test_itemAccess(self):
-        ctx1= self.group.getContext("string")
-        ctx2= self.group["string"]          
-        self.assertTrue( ctx1 is ctx2 )
+        ctx1= self.group.getContext("val1")
+        ctx2= self.group["val1"]
+        self.assertIs(ctx1, ctx2)
         
-        self.assertTrue("string" in self.group)
-        self.assertTrue("integer" in self.group)
+        self.assertTrue("val1" in self.group)
+        self.assertTrue("val2" in self.group)
         self.assertFalse("Nothing" in self.group)
 
-        self.assertRaises(TypeError, self.group.__getitem__, "str")
+        with self.assertRaises(KeyError):
+            ctx= self.group["doesNotExist"]
+
 
 
     def test_contextInterface(self):
-        self.group.enter()
+        self.group.open()
+        self.group.close()
+
         with self.assertRaises(NotImplementedError):
-            self.group.addContent("ctx")
-        self.group.leave()
+            self.group.count
+            
+        self.assertIsNone(self.group.maxCount)
+        self.assertEqual(self.group.about, "")
         
-        self.assertRaises(IOError, self.group.enter)
-        
-        self.group.reset()        
-        self.group.enter()
-        self.group.addContent(" \n \r\n \t")
-        self.group.leave()
-        self.assertEqual(self.group.count, 1)
-        self.assertEqual(self.group.help, "")
-
-
-    def test_translation(self):
-        d= {"str" : "string", "int" : "integer", "grp" : "section" }
-        self.group.translate(d)
-        self.setValue("int", 1234, "int")
-        self.setValue("str", "What a string", "str")
-        self.setValue("floater", 5.4321, "float")
-        
-        with self.assertRaises(KeyError):
-            self.setValue("integer", 1234, "int")
+        with self.assertRaises(NotImplementedError):
+            self.group.data
                 
-        
 
 def suite():
     """Get Test suite object

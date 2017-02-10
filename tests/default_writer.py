@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from config import DefaultWriter, DefaultReader, IniReader
-from config import XmlReader, ErrorHandler
-
+from schema import DefaultWriter, DefaultReader, IniReader
+from schema.xml import SaxReader
 
 from io import StringIO
 
@@ -14,8 +13,7 @@ class DefaultWriterTestCase(unittest.TestCase):
     def setUp(self):
         self.err  = StringIO()
         self.out  = StringIO()
-        errHandler= ErrorHandler(out=self.err, err=self.err)
-        self.handler1= DefaultWriter(os=self.out, errorHandler=errHandler)
+        self.handler1= DefaultWriter(os=self.out)
         self.maxDiff= None
 
                                                   
@@ -37,7 +35,7 @@ class DefaultWriterTestCase(unittest.TestCase):
             '  <f>sin(arg1= 1, arg2= 3)</f>\n'
             '</root>'.encode("utf-8") )
 
-        parseString(str1, XmlReader(self.handler1))
+        parseString(str1, SaxReader(self.handler1))
 
         expected=str(
             "root {\n"

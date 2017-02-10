@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+
+#TODO: This has to be renamed to schema_reader and adapted to the SchemaReader
+# interface
+
 import unittest
 
 from config import XmlWriter, ErrorHandler, DefaultWriter, Dispatcher
