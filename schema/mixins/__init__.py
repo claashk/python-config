@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 #from .attribute import Attribute, attr
@@ -13,3 +12,4 @@
 from .group import Group, children
 from .value import Value, ref
 from .list import List, lst
+from .proxy import Proxy, proxy

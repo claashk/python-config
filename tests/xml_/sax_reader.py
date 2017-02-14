@@ -2,7 +2,7 @@
 import unittest
 
 from schema import Validator, node
-from schema.mixins import children, ref
+from schema.mixins import children, ref, lst, proxy
 from schema.xml import SaxReader
 from schema import SchemaError
 
@@ -24,7 +24,11 @@ class SaxReaderTestCase(unittest.TestCase):
                         node("value2") << ref(self, "val2", float),
                         node("section") << children() [
                           node("value3") << ref(self, "val3"),
-                          node("value4") << ref(self, "val4", int)
+                          node("value4") << lst(self, "val4", int),
+                        ],
+                        node("value") << proxy(key="key")[
+                            node("value5") << ref(self, "val5", int),
+                            node("value6") << ref(self, "val6", float)
                         ]
                       ]
         self.validator= Validator(self.context)
@@ -43,6 +47,8 @@ class SaxReaderTestCase(unittest.TestCase):
             '    <value4>2</value4>\n'
             '    <value4>42</value4>\n'
             '  </section>\n'
+            '  <value key="value5">5</value>\n'
+            '  <value key="value6">6.6</value>\n'
             '</root>'.encode("utf-8") )
 
         parseString(str1, self.reader)
@@ -53,7 +59,9 @@ class SaxReaderTestCase(unittest.TestCase):
         self.assertEqual(self.val1, 5)
         self.assertEqual(self.val2, 1.23)
         self.assertEqual(self.val3, "on")
-        self.assertEqual(self.val4, 42)
+        self.assertEqual(self.val4, [1, 2, 42])
+        self.assertEqual(self.val5, 5)
+        self.assertEqual(self.val6, 6.6)
         self.assertEqual(self.stderr.getvalue(), "")
         self.assertEqual(self.stdout.getvalue(), "")
 

@@ -14,26 +14,36 @@ class ValueTestCase(unittest.TestCase):
           node("iList") << lst(obj=self, attr="ints", cls=int),
           node("floats") << lst(obj=self, cls=float) ]
         
+        
+    def toList(self, ctx):
+        return [item.value for item in ctx]
+        
 
     def test_construction(self):
-        self.assertEqual(self.ints, self.group.iList.value)
-        self.assertEqual(self.floats, self.group.floats.value)
+        self.assertEqual(self.ints, self.group.iList.list)
+        self.assertEqual(self.floats, self.toList(self.group.floats))
+        self.assertEqual(self.floats, self.group.floats.list)
         
     
     def test_fromString(self):
         self.group.open() #this should reset
         self.group.iList.fromString("1")
+        self.assertEqual(self.group.iList.value, 1)
         self.group.iList.fromString("2")
+        self.assertEqual(self.group.iList.value, 2)
         self.group.iList.fromString("3")
+        self.assertEqual(self.group.iList.value, 3)
 
         self.group.floats.fromString("1.1")
         self.group.floats.fromString("1.2")
+        self.assertEqual(self.group.floats.value, 1.2)
         self.group.floats.fromString("1.3")
         self.group.close()
         
-        
         self.assertEqual(self.ints, [1,2,3])
+        self.assertEqual(self.toList(self.group.iList), [1,2,3])
         self.assertEqual(self.floats, [1.1, 1.2, 1.3])
+        self.assertEqual(self.toList(self.group.floats), [1.1, 1.2, 1.3])
 
         self.group.open() #Should reset all children
         self.assertEqual(self.ints, [])
@@ -42,7 +52,6 @@ class ValueTestCase(unittest.TestCase):
 
         self.assertRaises(ValueError, self.group.iList.fromString, "12.5")
 
-       
         
 def suite():
     """Get Test suite object

@@ -13,16 +13,6 @@ class Group(Mixin):
         #over the items in the order in which they were defined. Thus we
         #use a list in combination with a dictionary for lookup by name
 
-        
-    def __iter__(self):
-        """Iterate over member contexts
-        
-        Return:
-            Iterator object
-        """
-        return iter(self._children)
-
-
     def __contains__(self, name):
         """Check if this context contains a subcontext with a given name
         
@@ -40,11 +30,14 @@ class Group(Mixin):
         """Square bracket implementation for child insertion
         
         Arguments:
-            children (iterable): Iterable of child contexts
+            children (Tuple): Child contexts
             
         Return:
             ``self``
         """
+        if isinstance(children, Context):
+            children= (children, ) #in case there is a single context
+        
         self._children.clear()
         self._index.clear()
         
@@ -62,9 +55,17 @@ class Group(Mixin):
         """
         for child in self._children:
             child.parent= other
-            
+
         super().moveTo(other)
-        
+
+
+    def children(self):
+        """Iterate over member contexts
+
+        Return:
+            Iterator object
+        """
+        return iter(self._children)
 
     def validate(self):
         """Validates all children
@@ -95,12 +96,12 @@ class Group(Mixin):
                 child.reset() 
 
 
-    def close(self):
-        """Close the current context
-
-        This default implementation does nothing.
-        """
-        return
+#    def close(self):
+#        """Close the current context
+#
+#        This default implementation does nothing.
+#        """
+#        return
 
 
     def getChild(self, name):
@@ -110,7 +111,7 @@ class Group(Mixin):
             name (str): Name of child context to access
         
         Raise:
-            `ValueError: If context with the given name exists
+            `ValueError: If no context with the given name exists
             
         Return:
              :class:`schema.Context`: Child context 

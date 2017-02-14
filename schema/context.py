@@ -5,6 +5,10 @@ class ContextError(RuntimeError):
 
 #TODO Context should provide error handler interface, which mixins can use e.g.
 # to produce warnings. How do we obtain a locator ?
+# Mabe context should provide state flags instead of direct error output, which
+# can be queried by application. Somthing like isGood, hasWarnings, hasErrors,
+# ...
+
 class Context(object):
     """Context base class with minimal functionality
 
@@ -32,13 +36,23 @@ class Context(object):
         return ""
 
 
-    def __iter__(self):
-        """Iterate over sub-contexts. This function simply returns.
-        """
-        return
-        yield #necessary to turn this method into a generator
+    def __len__(self):
+        """Get multiplicity of this context.
 
-       
+        Return:
+            int: 1
+        """
+        return 1
+
+
+    def __iter__(self):
+        """Iterate over occurences of this context.
+        
+        Yield:
+            :class:`~schema.Context`: ``self``
+        """
+        yield self
+
     def __contains__(self, name):
         """Check if this context contains a subcontext with a given name
         
@@ -81,19 +95,29 @@ class Context(object):
 
         self.__class__= T  #reset type of this object
         mixin.moveTo(self) #init mixin related attributes
-        
+
         return self
 
-        
+
     @property    
     def attributes(self):
         """Get dictionary of attributes for this context
-        
+
         Attributes are intended to be passed to the context, when the open
         method is called. This default implementation returns an empty
         dictionary.
         """
         return dict()
+
+
+    def children(self):
+        """Iterate over sub-contexts. This function simply returns.
+
+        Yield:
+            :class:`~schema.Context`: Sub context
+        """
+        return
+        yield #necessary to turn this method into a generator
 
 
     def fromString(self, string):
@@ -129,7 +153,7 @@ class Context(object):
         This default implementation does nothing.
 
         Arguments:
-           kwargs : Keyword arguments
+           **kwargs : Keyword arguments
         """
         return
 

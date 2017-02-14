@@ -2,6 +2,7 @@
 from .value import Value
 from ..mixin import Mixin
 
+
 class List(Value):
     """Appends rather than replaces new values
     
@@ -13,11 +14,31 @@ class List(Value):
     """
     def __init__(self, obj=None, attr=None, cls=str):
         super().__init__(obj=obj, attr=attr, cls=cls)
+        self._index= 0
 
         
     def __str__(self):
         """Convert current content to string"""
         return str(self.value)
+
+
+    def __len__(self):
+        return len(self.list)
+
+
+    def __iter__(self):
+        for self._index in range(len(self)):
+            yield self
+
+        
+    @property
+    def list(self):
+        """Access entire list
+        
+        Return:
+            list: List containing items of this List
+        """
+        return getattr(self._obj, self._attr)
 
 
     @property
@@ -27,14 +48,15 @@ class List(Value):
         Return:
             list: List containing items of this List
         """
-        return getattr(self._obj, self._attr)
+        return self.list[self._index]
 
 
     @value.setter
     def value(self, val):
         """Append value to internal list
         """
-        self.value.append(val)
+        self.list.append(val)
+        self._index= len(self) - 1 
 
 
     def reset(self):

@@ -8,7 +8,7 @@ from schema import node
 class GroupTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.names= ["one", "two", "three", "four", "five", "six", "seven"]
+        self.names= ["one", "two", "three", "four", "five", "six", "seven", "eight"]
         self.group= node("root") << children() [
                         node(self.names[0]),
                         node(self.names[1]),
@@ -17,13 +17,14 @@ class GroupTestCase(unittest.TestCase):
                           node(self.names[4])
                         ],
                         node(self.names[5]),
-                        node(self.names[6])
+                        node(self.names[6]) << children() [
+                          node(self.names[7])
+                        ],
                     ]
 
-        
     @staticmethod
     def recurse(g):
-        for child in g:
+        for child in g.children():
             yield child
 
             if isinstance(child, Group):

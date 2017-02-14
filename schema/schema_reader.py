@@ -35,12 +35,13 @@ class SchemaReader(object):
            context (:class:`~schema.Context`): Context to read and forward to
                destination handler.
         """
-        for ctxName in schema():
-            schema.enter(ctxName)
+        for name in schema.children():
+            schema.enter(name)
             ctx= schema.activeContext
-            self._dest.enter(ctxName, attrs=ctx.attributes)
-            self._dest.content( str(ctx) )
-            self._dump(schema)
-            self._dest.leave()
+            for item in ctx:
+                self._dest.enter(item.name, attrs=item.attributes)
+                self._dest.content( str(item) )
+                self._dump(schema)
+                self._dest.leave()
             schema.leave()
     

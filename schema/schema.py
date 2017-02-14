@@ -35,7 +35,7 @@ class Schema(object):
 
 
     def __iter__(self):
-        """Iterate over sub-context names
+        """Iterate over all occurences of the current context
         """
         try:
             for ctx in self.activeContext:
@@ -49,6 +49,19 @@ class Schema(object):
         return bool(self._stack)
 
         
+    def children(self):
+        """Iterate over all occurences of the current context
+        
+        Yield:
+            str: Name of each child
+        """
+        try:
+            for ctx in self.activeContext.children():
+                yield ctx.name
+        except IndexError:
+            yield self._root.name
+
+
     def open(self, context):
         """Open new context
         

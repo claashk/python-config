@@ -18,11 +18,10 @@ class Value(Mixin):
         self._obj  = obj
         self._attr = attr
         self._type = cls
-       
+
         if self._obj is None:
             self._obj= self
 
-        
     def __str__(self):
         """Convert current content to string"""
         return str(self.value)

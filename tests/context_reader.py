@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-#TODO: This has to be renamed to schema_reader and adapted to the SchemaReader
-# interface
+#TODO: has to be adapted
 
 import unittest
 
-from config import XmlWriter, ErrorHandler, DefaultWriter, Dispatcher
-from config.context import Group, Value, MultiValue, Map, List
+from schema import node
+from schema.xml import XmlWriter
+from schema.mixins import ref, children
 from config.context.decorator import Help
 from config import ContextReader
 

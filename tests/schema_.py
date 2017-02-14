@@ -23,7 +23,7 @@ class SchemaTestCase(unittest.TestCase):
         self.schema= Schema(self.context)
     
     def recurse(self):
-        for ctxName in self.schema:
+        for ctxName in self.schema.children():
             self.schema.enter(ctxName)
             yield self.schema
             yield from self.recurse()
