@@ -1,3 +1,6 @@
 /doc/build/*
+/doc/gh-pages/*
+__pycache__/
 .spyderproject
-*.pyc
+*.py[cod]
+
