@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Schema Interface &mdash; PyConfig 0.7.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="PyConfig 0.7.0 documentation" href="../index.html"/>
+        <link rel="up" title="The Schema Package" href="../schema.html"/>
+        <link rel="next" title="Content Handler Interface" href="content_handler.html"/>
+        <link rel="prev" title="Context Implementation" href="context.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyConfig
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../schema.html">The Schema Package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../schema.html#content">Content</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="context.html">Context Implementation</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Schema Interface</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#schema-api">Schema API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="content_handler.html">Content Handler Interface</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">PyConfig</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../schema.html">The Schema Package</a> &raquo;</li>
+      
+    <li>Schema Interface</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/schema/schema.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="schema-interface">
+<h1>Schema Interface<a class="headerlink" href="#schema-interface" title="Permalink to this headline">¶</a></h1>
+<p>A schema defines the content expected in configuration files in an abstract
+form. Class :class:~schema.Schema implements a structure to store schema
+information based on a directed graph: Each node of the graph represents a
+<a class="reference internal" href="context.html#schema.Context" title="schema.Context"><code class="xref py py-class docutils literal"><span class="pre">schema.Context</span></code></a>, which defines how to handle content within this context.</p>
+<div class="section" id="schema-api">
+<h2>Schema API<a class="headerlink" href="#schema-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="schema.Schema">
+<em class="property">class </em><code class="descclassname">schema.</code><code class="descname">Schema</code><span class="sig-paren">(</span><em>context=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/schema.html#Schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schema implements a user defined data model</p>
+<p>A Schema implements a user-defined data model in terms of a graph of
+<code class="xref py py-class docutils literal"><span class="pre">Context</span></code> objects. The schema provides methods to traverse
+the graph and direct input to the appropriate context.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>context</strong> (<a class="reference internal" href="context.html#schema.Context" title="schema.Context"><code class="xref py py-class docutils literal"><span class="pre">Context</span></code></a>) &#8211; Root context forming the base of
+the data model</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="schema.Schema.__iter__">
+<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/schema.html#Schema.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Schema.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over all occurences of the current context</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Schema.activeContext">
+<code class="descname">activeContext</code><a class="headerlink" href="#schema.Schema.activeContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access currently active context</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Currently active context</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="context.html#schema.Context" title="schema.Context"><code class="xref py py-class docutils literal"><span class="pre">Context</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">IndexError</span></code> &#8211;
+If no context has been opened yet</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Schema.children">
+<code class="descname">children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/schema.html#Schema.children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Schema.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over all occurences of the current context</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><em>str</em> &#8211;
+Name of each child</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Schema.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/schema.html#Schema.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Schema.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close all remaining open contexts</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Schema.content">
+<code class="descname">content</code><span class="sig-paren">(</span><em>content</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/schema.html#Schema.content"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Schema.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add content to content buffer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>content</strong> (<em>str</em>) &#8211; Content string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Schema.enter">
+<code class="descname">enter</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/schema.html#Schema.enter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Schema.enter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enter a new context</p>
+<p>Retrieves the new context from the current context with a call to
+<code class="xref py py-meth docutils literal"><span class="pre">enter()</span></code> is invoked.</p>
+<p>Calling this method on a Schema which is not open, results in
+undefined behaviour.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; Name of context to enter</li>
+<li><strong>**kwargs</strong> &#8211; Additional arguments passed to context upon opening</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211;
+If no child with the provided name exists</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code> &#8211;
+If no root context has been specified</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Schema.leave">
+<code class="descname">leave</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/schema.html#Schema.leave"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Schema.leave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Leave the current context</p>
+<p>Calling this method on a Schema which is not open, results in
+undefined behaviour.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Schema.open">
+<code class="descname">open</code><span class="sig-paren">(</span><em>context</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/schema.html#Schema.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Schema.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open new context</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>(</strong> (<em>context</em>) &#8211; class:Context): New root context</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Schema.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/schema.html#Schema.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Schema.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close all contexts and re-open root context</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211;
+if root context has not been specified.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="content_handler.html" class="btn btn-neutral float-right" title="Content Handler Interface" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="context.html" class="btn btn-neutral" title="Context Implementation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Claas H. Köhler.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.7.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

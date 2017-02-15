@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Content Handler Interface &mdash; PyConfig 0.7.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="PyConfig 0.7.0 documentation" href="../index.html"/>
+        <link rel="up" title="The Schema Package" href="../schema.html"/>
+        <link rel="prev" title="Schema Interface" href="schema.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyConfig
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../schema.html">The Schema Package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../schema.html#content">Content</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="context.html">Context Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="schema.html">Schema Interface</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Content Handler Interface</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#contenthandler-interface">ContentHandler Interface</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">PyConfig</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../schema.html">The Schema Package</a> &raquo;</li>
+      
+    <li>Content Handler Interface</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/schema/content_handler.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="content-handler-interface">
+<h1>Content Handler Interface<a class="headerlink" href="#content-handler-interface" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#schema.content_handler.ContentHandler" title="schema.content_handler.ContentHandler"><code class="xref py py-class docutils literal"><span class="pre">ContentHandler</span></code></a> defines the interface for classes designed
+to obtain content from reader objects. As such <a class="reference internal" href="#schema.content_handler.ContentHandler" title="schema.content_handler.ContentHandler"><code class="xref py py-class docutils literal"><span class="pre">ContentHandler</span></code></a>
+can be regarded as an abstract base class. Examples of classes implementing this
+interface are <code class="xref py py-class docutils literal"><span class="pre">Validator</span></code> or <code class="xref py py-class docutils literal"><span class="pre">XmlWriter</span></code>.</p>
+<div class="section" id="contenthandler-interface">
+<h2>ContentHandler Interface<a class="headerlink" href="#contenthandler-interface" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="schema.content_handler.ContentHandler">
+<em class="property">class </em><code class="descclassname">schema.content_handler.</code><code class="descname">ContentHandler</code><a class="reference internal" href="../_modules/schema/content_handler.html#ContentHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.content_handler.ContentHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes content obtained from a reader</p>
+<p>ContentHandler derived objects are similar to xml.sax content handlers.
+They are intended to provide a defined interface for readers to pass in
+data and to distribute or process this data. Writers or validators are
+classes typically derived from this class.</p>
+<p>This is a pure base class defining the interface. For possible
+implementations refer to
+* <code class="xref py py-class docutils literal"><span class="pre">Validator</span></code>
+* <code class="xref py py-class docutils literal"><span class="pre">XmlWriter</span></code></p>
+<dl class="attribute">
+<dt id="schema.content_handler.ContentHandler.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#schema.content_handler.ContentHandler.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.content_handler.ContentHandler.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/content_handler.html#ContentHandler.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.content_handler.ContentHandler.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the currently openened source</p>
+<p>This default implementation does nothing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.content_handler.ContentHandler.comment">
+<code class="descname">comment</code><span class="sig-paren">(</span><em>comment</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/content_handler.html#ContentHandler.comment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.content_handler.ContentHandler.comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add comment to current context</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>comment</strong> (<em>str</em>) &#8211; String containing comment</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.content_handler.ContentHandler.content">
+<code class="descname">content</code><span class="sig-paren">(</span><em>content</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/content_handler.html#ContentHandler.content"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.content_handler.ContentHandler.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add content to current context</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>content</strong> (<em>str</em>) &#8211; String containing content</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.content_handler.ContentHandler.enter">
+<code class="descname">enter</code><span class="sig-paren">(</span><em>name</em>, <em>attrs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/content_handler.html#ContentHandler.enter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.content_handler.ContentHandler.enter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enter a new context</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; Name of context to enter</li>
+<li><strong>attrs</strong> (<em>dict</em>) &#8211; Attributes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.content_handler.ContentHandler.ignore">
+<code class="descname">ignore</code><span class="sig-paren">(</span><em>content</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/content_handler.html#ContentHandler.ignore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.content_handler.ContentHandler.ignore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add padding such as whitespaces or format characters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>content</strong> (<em>str</em>) &#8211; String containing potentially ignorable
+padding</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.content_handler.ContentHandler.leave">
+<code class="descname">leave</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/content_handler.html#ContentHandler.leave"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.content_handler.ContentHandler.leave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Leave the current context</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="schema.content_handler.ContentHandler.locator">
+<code class="descname">locator</code><a class="headerlink" href="#schema.content_handler.ContentHandler.locator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the currently used locator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Locator object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">schema.Locator</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.content_handler.ContentHandler.open">
+<code class="descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/content_handler.html#ContentHandler.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.content_handler.ContentHandler.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a new data source</p>
+<p>This default implementation does nothing</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="schema.html" class="btn btn-neutral" title="Schema Interface" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Claas H. Köhler.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.7.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

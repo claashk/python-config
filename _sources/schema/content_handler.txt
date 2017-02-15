@@ -1,0 +1,16 @@
+Content Handler Interface
+=========================
+
+The :class:`~schema.content_handler.ContentHandler` defines the interface for classes designed
+to obtain content from reader objects. As such :class:`~schema.content_handler.ContentHandler` 
+can be regarded as an abstract base class. Examples of classes implementing this
+interface are :class:`~schema.Validator` or :class:`~schema.xml.XmlWriter`.
+
+ContentHandler Interface
+------------------------
+
+.. autoclass:: schema.content_handler.ContentHandler
+   :members:
+   :special-members:
+
+

@@ -1,0 +1,386 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>schema.context &mdash; PyConfig 0.7.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="PyConfig 0.7.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyConfig
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../schema.html">The Schema Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">PyConfig</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>schema.context</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for schema.context</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="k">class</span> <span class="nc">ContextError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="c1">#TODO Context should provide error handler interface, which mixins can use e.g.</span>
+<span class="c1"># to produce warnings. How do we obtain a locator ?</span>
+<span class="c1"># Mabe context should provide state flags instead of direct error output, which</span>
+<span class="c1"># can be queried by application. Somthing like isGood, hasWarnings, hasErrors,</span>
+<span class="c1"># ...</span>
+
+<div class="viewcode-block" id="Context"><a class="viewcode-back" href="../../schema/context.html#schema.Context">[docs]</a><span class="k">class</span> <span class="nc">Context</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Context base class with minimal functionality</span>
+
+<span class="sd">    The data model consists of a tree, where each node is represented by an</span>
+<span class="sd">    instance of a :class:`~schema.Context` derived class. Context objects are</span>
+<span class="sd">    designed to provide minimal functionality themselves. Additional</span>
+<span class="sd">    functionality can be added through mixins. This allows for simple and</span>
+<span class="sd">    versatile customization with little overhead.</span>
+<span class="sd">    </span>
+<span class="sd">    For more information on mixins refer to the `:mod:~schema.mixins` sub</span>
+<span class="sd">    package.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        name (str): Context name</span>
+<span class="sd">        parent (:class:`schema.Context`): Parent context. `None` if no parent</span>
+<span class="sd">            exists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">=</span> <span class="n">parent</span>
+
+
+<div class="viewcode-block" id="Context.__str__"><a class="viewcode-back" href="../../schema/context.html#schema.Context.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert content of current context to string&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Context.__len__"><a class="viewcode-back" href="../../schema/context.html#schema.Context.__len__">[docs]</a>    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get multiplicity of this context.</span>
+
+<span class="sd">        Return:</span>
+<span class="sd">            int: 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="Context.__iter__"><a class="viewcode-back" href="../../schema/context.html#schema.Context.__iter__">[docs]</a>    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Iterate over occurences of this context.</span>
+<span class="sd">        </span>
+<span class="sd">        Yield:</span>
+<span class="sd">            :class:`~schema.Context`: ``self``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">yield</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Context.__contains__"><a class="viewcode-back" href="../../schema/context.html#schema.Context.__contains__">[docs]</a>    <span class="k">def</span> <span class="nf">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if this context contains a subcontext with a given name</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            name(str): Name of subcontext to search for</span>
+<span class="sd">        </span>
+<span class="sd">        Return:</span>
+<span class="sd">            bool: ``True`` if and only if ``self`` has a subcontext called</span>
+<span class="sd">            `name``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">False</span></div>
+
+
+<div class="viewcode-block" id="Context.__getattr__"><a class="viewcode-back" href="../../schema/context.html#schema.Context.__getattr__">[docs]</a>    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Used for group access.</span>
+
+<span class="sd">        Called only if no attribute called &#39;&#39;name&#39;&#39; is defined.</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            name (str): Attribute name</span>
+<span class="sd">            </span>
+<span class="sd">        Return:</span>
+<span class="sd">            object: Identical to :meth:~schema.Context.getChild`(name)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Context.__lshift__"><a class="viewcode-back" href="../../schema/context.html#schema.Context.__lshift__">[docs]</a>    <span class="k">def</span> <span class="nf">__lshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mixin</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add mixin to current context</span>
+<span class="sd">        </span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            decorator (:class:`~schema.Mixin`): Mixin derived object</span>
+<span class="sd">            </span>
+<span class="sd">        Return:</span>
+<span class="sd">            :class:~schema.Context`: ``self``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#create anonymous new type, which is derived from mixin and the current</span>
+        <span class="c1">#type</span>
+        <span class="n">T</span><span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">mixin</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)),</span> <span class="p">{})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">=</span> <span class="n">T</span>  <span class="c1">#reset type of this object</span>
+        <span class="n">mixin</span><span class="o">.</span><span class="n">moveTo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c1">#init mixin related attributes</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+    <span class="nd">@property</span>    
+    <span class="k">def</span> <span class="nf">attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get dictionary of attributes for this context</span>
+
+<span class="sd">        Attributes are intended to be passed to the context, when the open</span>
+<span class="sd">        method is called. This default implementation returns an empty</span>
+<span class="sd">        dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="Context.children"><a class="viewcode-back" href="../../schema/context.html#schema.Context.children">[docs]</a>    <span class="k">def</span> <span class="nf">children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Iterate over sub-contexts. This function simply returns.</span>
+
+<span class="sd">        Yield:</span>
+<span class="sd">            :class:`~schema.Context`: Sub context</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span>
+        <span class="k">yield</span> <span class="c1">#necessary to turn this method into a generator</span></div>
+
+
+<div class="viewcode-block" id="Context.fromString"><a class="viewcode-back" href="../../schema/context.html#schema.Context.fromString">[docs]</a>    <span class="k">def</span> <span class="nf">fromString</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Assign content to this context from a string</span>
+
+<span class="sd">        This default implementation does nothing</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">           string (str): String containing data. Ignored in this implementation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="Context.validate"><a class="viewcode-back" href="../../schema/context.html#schema.Context.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make sure this context is valid.</span>
+
+<span class="sd">        This default implementation does nothing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="Context.reset"><a class="viewcode-back" href="../../schema/context.html#schema.Context.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset the current context</span>
+
+<span class="sd">        This default implementation does nothing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="Context.open"><a class="viewcode-back" href="../../schema/context.html#schema.Context.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open the current context</span>
+
+<span class="sd">        This default implementation does nothing.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">           **kwargs : Keyword arguments</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="Context.close"><a class="viewcode-back" href="../../schema/context.html#schema.Context.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close the current context</span>
+
+<span class="sd">        This default implementation does nothing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="Context.getChild"><a class="viewcode-back" href="../../schema/context.html#schema.Context.getChild">[docs]</a>    <span class="k">def</span> <span class="nf">getChild</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get sub-context</span>
+<span class="sd">        </span>
+<span class="sd">        Called by the schema to obtain a sub-context during parsing.</span>
+<span class="sd">        </span>
+<span class="sd">        Raise:</span>
+<span class="sd">            :class:`~schema.ContextError` if no such context exists</span>
+<span class="sd">            </span>
+<span class="sd">        Return:</span>
+<span class="sd">             :class:`~schema.Context`: Child context called `name`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">ContextError</span><span class="p">(</span><span class="s2">&quot;Error accessing child &#39;{}&#39;: Context &#39;{}&#39; does not &quot;</span>
+                           <span class="s2">&quot;support children&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span></div></div>
+    
+    
+<div class="viewcode-block" id="node"><a class="viewcode-back" href="../../schema/context.html#schema.node">[docs]</a><span class="k">def</span> <span class="nf">node</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a context node</span>
+<span class="sd">    </span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        name (str): Name of context node</span>
+<span class="sd">        </span>
+<span class="sd">    Return:</span>
+<span class="sd">        :class:`~schema.Context`: New context object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Context</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+        
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Claas H. Köhler.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.7.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

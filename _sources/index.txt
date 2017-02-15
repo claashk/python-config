@@ -1,0 +1,103 @@
+.. PyConfig documentation master file, created by
+   sphinx-quickstart on Tue Sep 15 13:21:10 2015.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to pySchema's documentation!
+====================================
+pySchema is a python package supporting various configuration files. The package
+supports INI, XML and a custom ASCII format similar in functionality to XML, but
+with a little less text.
+
+
+Rationale
+---------
+python schema is similar in functionality to most schema languages such as xlt.
+However, in contrast to xsl, which is programming language agnostic, schema aims
+to be independent of the markup by choosing python as its programming language.
+The advantage is, that it is straight forward to use a schema written in python
+schema in combination with another markup language such as yaml, xml or a custom
+config file format. Addtionally python schema aims to be very flexible in its
+usage in terms of addtional functionality. Thirdly it aims to provide a very
+concise and simple to use interface.
+
+
+Appetizer
+---------
+Consider the following xml file
+
+.. code:: xml
+
+   <root>
+     <value1>42</value1>
+     <section>
+       <value2>4.2</value1>
+       <item>1</item>
+       <item>2</item>
+       <item>3</item>
+     </section>
+     <option key="param1">on</option>
+     <option key="param2">yes</option>
+   </root>
+
+A python schema to parse this file would look as follows:
+
+.. code:: python
+
+   class MyData(object):
+       pass
+
+   dest= MyData()
+
+   context= node("root")
+            << children()[
+               node("value1") << ref(dest, "val1"),
+               node("section")
+               << children() [
+                  node("value2") << ref(dest, "val2", float),
+                  node("item") << lst(dest, "intList", int),
+               ],
+               node("option")
+               << proxy(key="key")[
+                  node("param1") << ref(dest, "p1", Bool),
+                  node("param2") << ref(dest, "p2", Bool)
+               ]
+           ]
+    validator= Validator(context)
+    reader= SaxReader(validator)
+    parse("input.xml")
+
+    print(dest.val1)    # 42
+    print(dest.val2)    # 4.2
+    print(dest.intList) # [1,2,3]
+    print(dest.p1)      # True
+    print(dest.p2)      # False
+
+
+Design Concept
+--------------
+The main concept of this package is the context. A context describes an entity,
+which handles content passed to it. In terms of xml, a context can be an element.
+There exist several different context implementations for different kind of input.
+Contexts which process content such as key value pairs and contexts which may
+hold other content derived objects for nesting. All context dervived objects are
+gathered in the sub-package context.
+
+
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+   schema
+   
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+

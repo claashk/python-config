@@ -1,0 +1,465 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Context Implementation &mdash; PyConfig 0.7.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="PyConfig 0.7.0 documentation" href="../index.html"/>
+        <link rel="up" title="The Schema Package" href="../schema.html"/>
+        <link rel="next" title="Schema Interface" href="schema.html"/>
+        <link rel="prev" title="The Schema Package" href="../schema.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyConfig
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../schema.html">The Schema Package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../schema.html#content">Content</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="">Context Implementation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#convenience-functions">Convenience Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#context-api">Context API</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="schema.html">Schema Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="content_handler.html">Content Handler Interface</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">PyConfig</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../schema.html">The Schema Package</a> &raquo;</li>
+      
+    <li>Context Implementation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/schema/context.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="context-implementation">
+<h1>Context Implementation<a class="headerlink" href="#context-implementation" title="Permalink to this headline">¶</a></h1>
+<p>Context objects form the heart of a <a class="reference internal" href="schema.html#schema.Schema" title="schema.Schema"><code class="xref py py-class docutils literal"><span class="pre">Schema</span></code></a>. They define how
+content is interpreted within certain parts of the config file.</p>
+<div class="section" id="convenience-functions">
+<h2>Convenience Functions<a class="headerlink" href="#convenience-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="schema.node">
+<code class="descclassname">schema.</code><code class="descname">node</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a context node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; Name of context node</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New context object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#schema.Context" title="schema.Context"><code class="xref py py-class docutils literal"><span class="pre">Context</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="context-api">
+<h2>Context API<a class="headerlink" href="#context-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="schema.Context">
+<em class="property">class </em><code class="descclassname">schema.</code><code class="descname">Context</code><span class="sig-paren">(</span><em>name=''</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context base class with minimal functionality</p>
+<p>The data model consists of a tree, where each node is represented by an
+instance of a <a class="reference internal" href="#schema.Context" title="schema.Context"><code class="xref py py-class docutils literal"><span class="pre">Context</span></code></a> derived class. Context objects are
+designed to provide minimal functionality themselves. Additional
+functionality can be added through mixins. This allows for simple and
+versatile customization with little overhead.</p>
+<p>For more information on mixins refer to the <cite>:mod:~schema.mixins</cite> sub
+package.</p>
+<dl class="attribute">
+<dt id="Context.name">
+<code class="descname">name</code><a class="headerlink" href="#Context.name" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em></p>
+<p>Context name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Context.parent">
+<code class="descname">parent</code><a class="headerlink" href="#Context.parent" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#schema.Context" title="schema.Context"><code class="xref py py-class docutils literal"><span class="pre">schema.Context</span></code></a></p>
+<p>Parent context. <cite>None</cite> if no parent
+exists.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.__contains__">
+<code class="descname">__contains__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.__contains__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.__contains__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if this context contains a subcontext with a given name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; Name of subcontext to search for</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">True</span></code> if and only if <code class="docutils literal"><span class="pre">self</span></code> has a subcontext called
+<cite>name`</cite></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.__getattr__">
+<code class="descname">__getattr__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.__getattr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.__getattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for group access.</p>
+<p>Called only if no attribute called &#8216;&#8217;name&#8217;&#8217; is defined.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; Attribute name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Identical to :meth:~schema.Context.getChild`(name)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.__iter__">
+<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over occurences of this context.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><a class="reference internal" href="#schema.Context" title="schema.Context"><code class="xref py py-class docutils literal"><span class="pre">Context</span></code></a> &#8211;
+<code class="docutils literal"><span class="pre">self</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.__len__">
+<code class="descname">__len__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.__len__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.__len__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get multiplicity of this context.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">1</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.__lshift__">
+<code class="descname">__lshift__</code><span class="sig-paren">(</span><em>mixin</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.__lshift__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.__lshift__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add mixin to current context</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>decorator</strong> (<code class="xref py py-class docutils literal"><span class="pre">Mixin</span></code>) &#8211; Mixin derived object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">class:~schema.Context`: <code class="docutils literal"><span class="pre">self</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.__str__">
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert content of current context to string</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Context.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#schema.Context.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Context.attributes">
+<code class="descname">attributes</code><a class="headerlink" href="#schema.Context.attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dictionary of attributes for this context</p>
+<p>Attributes are intended to be passed to the context, when the open
+method is called. This default implementation returns an empty
+dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.children">
+<code class="descname">children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over sub-contexts. This function simply returns.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><a class="reference internal" href="#schema.Context" title="schema.Context"><code class="xref py py-class docutils literal"><span class="pre">Context</span></code></a> &#8211;
+Sub context</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the current context</p>
+<p>This default implementation does nothing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.fromString">
+<code class="descname">fromString</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.fromString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.fromString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign content to this context from a string</p>
+<p>This default implementation does nothing</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string</strong> (<em>str</em>) &#8211; String containing data. Ignored in this implementation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.getChild">
+<code class="descname">getChild</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.getChild"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.getChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get sub-context</p>
+<p>Called by the schema to obtain a sub-context during parsing.</p>
+<dl class="docutils">
+<dt>Raise:</dt>
+<dd><code class="xref py py-class docutils literal"><span class="pre">ContextError</span></code> if no such context exists</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Child context called <cite>name</cite>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#schema.Context" title="schema.Context"><code class="xref py py-class docutils literal"><span class="pre">Context</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.open">
+<code class="descname">open</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the current context</p>
+<p>This default implementation does nothing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>**kwargs</strong> &#8211; Keyword arguments</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the current context</p>
+<p>This default implementation does nothing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="schema.Context.validate">
+<code class="descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/schema/context.html#Context.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#schema.Context.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make sure this context is valid.</p>
+<p>This default implementation does nothing</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="schema.html" class="btn btn-neutral float-right" title="Schema Interface" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../schema.html" class="btn btn-neutral" title="The Schema Package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Claas H. Köhler.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.7.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
